@@ -19,9 +19,10 @@ _rake()
     *)
       if [[ $cur == -* ]]; then
         local options="
-          -C --classic-namespace -D --describe -n --dry-run -h --help -I --libdir
-          -N --nosearch -P --prereqs -q --quiet -f --rakefile -R --rakelibdir
-          -r --require -s --silent -T --tasks -t --trace -v --verbose -V --version"
+          -C --classic-namespace -D --describe -n --dry-run -h --help
+          -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
+          -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
+          -v --verbose -V --version"
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
         COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
