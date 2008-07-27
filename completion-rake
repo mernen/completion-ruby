@@ -54,11 +54,15 @@ __rake_get_rakefile()
   done
 
   local fn
-  for fn in rakefile Rakefile; do
-    if [[ -f $fn ]]; then
-      echo "$fn"
-      return
-    fi
+  while true; do
+    for fn in rakefile Rakefile; do
+      if [[ -f $fn ]]; then
+        echo "$(pwd)/$fn"
+        return
+      fi
+    done
+    cd ..
+    [[ $(pwd) == / ]] && break
   done
 
   return 1
