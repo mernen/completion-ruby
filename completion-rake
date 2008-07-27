@@ -39,8 +39,8 @@ __rake()
 
   if [[ $2 != $cur ]]; then
     # remove prefix
-    local prefix="${cur:0:$((${#cur} - ${#2}))}"
-    COMPREPLY=("${COMPREPLY[@]/#$prefix/}")
+    local -i prefix_len=${#cur}-${#2}
+    COMPREPLY=("${COMPREPLY[@]#"${cur:0:$prefix_len}"}")
   fi
 }
 
