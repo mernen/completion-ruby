@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
-# http://mernen.com/projects/completion-rake
+# http://mernen.com/projects/completion-ruby
 #
 # To use, source this file on bash:
 #   . completion-rake
