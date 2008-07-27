@@ -1,0 +1,35 @@
+#! bash
+# This file is not meant to be executed on its own; the line above is merely
+# a hint for text editors
+_rake()
+{
+  local cmd="$1"
+  # $2 returns just the part after the last colon
+  local cur="${COMP_WORDS[$COMP_CWORD]}"
+  local prev="$3"
+  COMPREPLY=()
+
+  if [[ $cur == -* ]]; then
+    local options="
+      -C --classic-namespace -D --describe -n --dry-run -h --help -I --libdir
+      -N --nosearch -P --prereqs -q --quiet -f --rakefile -R --rakelibdir
+      -r --require -s --silent -T --tasks -t --trace -v --verbose -V --version"
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
+  else
+    COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
+  fi
+
+  if [[ $2 != $cur ]]; then
+    # remove prefix
+    local prefix="${cur:0:$((${#cur} - ${#2}))}"
+    COMPREPLY=(${COMPREPLY[@]/#$prefix/})
+  fi
+}
+
+_rake_tasks()
+{
+  local tasks="$(rake --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\w:]+)/ and puts $1')"
+  echo $tasks
+}
+
+complete -F _rake -o default rake
