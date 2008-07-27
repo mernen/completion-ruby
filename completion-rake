@@ -82,7 +82,7 @@ __rake_tasks()
   local rakefile="${1:-$rakefile}"
   local rakedir="${2:-$rakedir}"
   [[ -f $rakefile ]] || return 1
-  rakefile="$(readlink -f "$rakefile")"
+  rakefile="$(readlink -f -- "$rakefile")"
 
   local cachefile="$HOME/.local/rake-completion-cache"
   local tasks
@@ -92,11 +92,11 @@ __rake_tasks()
   else
     [[ $rakedir ]] && cd "$rakedir"
     tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\S]+)/ and puts $1')"
-    local cachedir="$(dirname "$cachefile")"
+    local cachedir="$(dirname -- "$cachefile")"
     (mkdir --parents "$cachedir" && echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
   fi
 
-  echo $tasks
+  echo "$tasks"
 }
 
 complete -F __rake -o default rake
