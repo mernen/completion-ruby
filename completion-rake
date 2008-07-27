@@ -9,15 +9,24 @@ _rake()
   local prev="$3"
   COMPREPLY=()
 
-  if [[ $cur == -* ]]; then
-    local options="
-      -C --classic-namespace -D --describe -n --dry-run -h --help -I --libdir
-      -N --nosearch -P --prereqs -q --quiet -f --rakefile -R --rakelibdir
-      -r --require -s --silent -T --tasks -t --trace -v --verbose -V --version"
-    COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  else
-    COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
-  fi
+  case "$prev" in
+    -f | --rakefile | -r | --require)
+      # leave COMPREPLY blank, let the default handle it
+      return;;
+    -I | --libdir | -R | --rakelibdir)
+      # compgen -o dirnames isn't very good, so leave it at default too
+      return;;
+    *)
+      if [[ $cur == -* ]]; then
+        local options="
+          -C --classic-namespace -D --describe -n --dry-run -h --help -I --libdir
+          -N --nosearch -P --prereqs -q --quiet -f --rakefile -R --rakelibdir
+          -r --require -s --silent -T --tasks -t --trace -v --verbose -V --version"
+        COMPREPLY=($(compgen -W "$options" -- "$cur"))
+      else
+        COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
+      fi
+  esac
 
   if [[ $2 != $cur ]]; then
     # remove prefix
