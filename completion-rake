@@ -25,6 +25,8 @@ _rake()
           -v --verbose -V --version"
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
+        local rakefile
+        _rake_get_rakefile
         COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
       fi
   esac
@@ -36,9 +38,40 @@ _rake()
   fi
 }
 
+_rake_get_rakefile()
+{
+  local i
+  for (( i=0; i<=$COMP_CWORD-1; ++i )); do
+    arg="${COMP_WORDS[$i]}"
+
+    case $arg in
+      --rakefile | -f)
+        rakefile="${COMP_WORDS[$(($i + 1))]}"
+        return;;
+      --rakefile=* | -f=*)
+        rakefile="${arg#*=}"
+        return;;
+    esac
+  done
+  
+  local fn
+  for fn in rakefile Rakefile; do
+    if [ -f "$fn" ]; then
+      rakefile="$fn"
+      return
+    fi
+  done
+
+  return 1
+}
+
 _rake_tasks()
 {
-  local tasks="$(rake --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\w:]+)/ and puts $1')"
+  local rakefile="${1:-$rakefile}"
+  if [ ! -f "$rakefile" ]; then
+    return 1
+  fi
+  local tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\w:]+)/ and puts $1')"
   echo $tasks
 }
 
