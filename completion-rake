@@ -44,6 +44,15 @@ __rake()
   fi
 }
 
+# Finds the appropriate rakefile, given the arguments in the command-line and
+# the current directory.
+#
+# Writes to `$rakefile` the path of the file, and sets `$rakedir` if the
+# command must be run from a different directory.
+#
+# Since this function sets new variables, it must NOT run on a subshell.
+#
+# Note that `$rakefile` is also NOT guaranteed to be absolute!
 __rake_get_rakefile()
 {
   local i
@@ -76,6 +85,12 @@ __rake_get_rakefile()
   return 1
 }
 
+# Outputs the list of possible tasks for the given rakefile and rakedir,
+# one task per line.
+#
+# Parameters can be passed either as environment variables `$rakefile` and
+# `$rakedir` or via positional arguments:
+#     __rake_tasks <rakefile> [rakedir]
 __rake_tasks()
 {
   local rakefile="${1:-$rakefile}"
