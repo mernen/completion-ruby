@@ -31,9 +31,8 @@ __rake()
           -v --verbose -V --version"
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
-        local rakefile="$(__rake_get_rakefile)"
-        local rakedir="$(tail -n +2 <<<"$rakefile")"
-        rakefile="$(head -n 1 <<<"$rakefile")"
+        local rakefile rakedir
+        __rake_get_rakefile
         COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
       fi
   esac
@@ -53,10 +52,10 @@ __rake_get_rakefile()
 
     case $arg in
       --rakefile | -f)
-        echo "${COMP_WORDS[$(($i + 1))]}"
+        rakefile="${COMP_WORDS[$(($i + 1))]}"
         return;;
       --rakefile=* | -f=*)
-        echo "${arg#*=}"
+        rakefile="${arg#*=}"
         return;;
     esac
   done
@@ -65,8 +64,8 @@ __rake_get_rakefile()
   while true; do
     for fn in rakefile Rakefile; do
       if [[ -f $fn ]]; then
-        echo "$(pwd)/$fn"
-        echo "$(pwd)"
+        rakedir="$(pwd)"
+        rakefile="$rakedir/$fn"
         return
       fi
     done
