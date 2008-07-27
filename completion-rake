@@ -81,7 +81,8 @@ __rake_tasks()
     tasks="$(tail -n +2 -- "$cachefile")"
   else
     tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\w:]+)/ and puts $1')"
-    (echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
+    local cachedir="$(dirname "$cachefile")"
+    (mkdir --parents "$cachedir" && echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
   fi
 
   echo $tasks
