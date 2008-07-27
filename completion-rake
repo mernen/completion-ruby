@@ -32,6 +32,8 @@ __rake()
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
         local rakefile="$(__rake_get_rakefile)"
+        local rakedir="$(tail -n +2 <<<"$rakefile")"
+        rakefile="$(head -n 1 <<<"$rakefile")"
         COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
       fi
   esac
@@ -64,6 +66,7 @@ __rake_get_rakefile()
     for fn in rakefile Rakefile; do
       if [[ -f $fn ]]; then
         echo "$(pwd)/$fn"
+        echo "$(pwd)"
         return
       fi
     done
@@ -77,6 +80,7 @@ __rake_get_rakefile()
 __rake_tasks()
 {
   local rakefile="${1:-$rakefile}"
+  local rakedir="${2:-$rakedir}"
   [[ -f $rakefile ]] || return 1
   rakefile="$(readlink -f "$rakefile")"
 
@@ -86,6 +90,7 @@ __rake_tasks()
         $(head -n 1 -- "$cachefile") == $rakefile ]]; then
     tasks="$(tail -n +2 -- "$cachefile")"
   else
+    [[ $rakedir ]] && cd "$rakedir"
     tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\w:]+)/ and puts $1')"
     local cachedir="$(dirname "$cachefile")"
     (mkdir --parents "$cachedir" && echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
