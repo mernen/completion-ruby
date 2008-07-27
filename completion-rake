@@ -1,7 +1,7 @@
 #! bash
 # This file is not meant to be executed on its own; the line above is merely
 # a hint for text editors
-_rake()
+__rake()
 {
   local cmd="$1"
   # $2 returns just the part after the last colon
@@ -26,8 +26,8 @@ _rake()
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
         local rakefile
-        _rake_get_rakefile
-        COMPREPLY=($(compgen -W "$(_rake_tasks)" -- "$cur"))
+        __rake_get_rakefile
+        COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
       fi
   esac
 
@@ -38,7 +38,7 @@ _rake()
   fi
 }
 
-_rake_get_rakefile()
+__rake_get_rakefile()
 {
   local i
   for (( i=0; i<=$COMP_CWORD-1; ++i )); do
@@ -65,7 +65,7 @@ _rake_get_rakefile()
   return 1
 }
 
-_rake_tasks()
+__rake_tasks()
 {
   local rakefile="${1:-$rakefile}"
   if [ ! -f "$rakefile" ]; then
@@ -75,4 +75,4 @@ _rake_tasks()
   echo $tasks
 }
 
-complete -F _rake -o default rake
+complete -F __rake -o default rake
