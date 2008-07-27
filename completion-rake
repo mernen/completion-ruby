@@ -1,6 +1,12 @@
-#! bash
-# This file is not meant to be executed on its own; the line above is merely
-# a hint for text editors
+# bash completion for the `rake` command.
+#
+# Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
+# Distributed under the MIT license.
+# http://mernen.com/projects/completion-rake
+#
+# To use, source this file on bash:
+#   . completion-rake
+
 __rake()
 {
   local cmd="$1"
@@ -89,3 +95,4 @@ __rake_tasks()
 }
 
 complete -F __rake -o default rake
+# vim: ai ft=sh sw=2 sts=2 et
