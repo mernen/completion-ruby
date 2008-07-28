@@ -32,7 +32,7 @@ __rake()
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       else
         local rakefile rakedir
-        __rake_get_rakefile
+        __rake_get_rakefile || return
         COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
       fi
   esac
@@ -55,11 +55,13 @@ __rake()
 # Note that `$rakefile` is also NOT guaranteed to be absolute!
 __rake_get_rakefile()
 {
+  # look for --rakefile or -f
+  # $rakedir is not defined in this case, regardless of where $rakefile lives
   local i
-  for (( i=0; i<=$COMP_CWORD-1; ++i )); do
+  for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
     arg="${COMP_WORDS[$i]}"
 
-    case $arg in
+    case "$arg" in
       --rakefile | -f)
         rakefile="${COMP_WORDS[$(($i + 1))]}"
         return;;
@@ -69,6 +71,9 @@ __rake_get_rakefile()
     esac
   done
 
+  # look for rakefiles in the directory hierarchy
+  # note that the command should run on the context of the directory where
+  # the rakefile is found, so $rakedir is set
   local fn
   pushd . >/dev/null
   while true; do
