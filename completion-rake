@@ -37,10 +37,10 @@ __rake()
       fi
   esac
 
-  if [[ "$2" != "$cur" ]]; then
+  if [[ "$cur" == *:* ]]; then
     # remove prefix
-    local -i prefix_len=${#cur}-${#2}
-    COMPREPLY=("${COMPREPLY[@]#"${cur:0:$prefix_len}"}")
+    local prefix="${cur%%:*}:"
+    COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
 }
 
