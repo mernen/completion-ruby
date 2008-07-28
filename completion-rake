@@ -110,14 +110,20 @@ __rake_tasks()
   local tasks
   if [[ "$cachefile" -nt "$rakefile" &&
         "$(head -n 1 -- "$cachefile")" == "$rakefile" ]]; then
-    tasks="$(tail -n +2 -- "$cachefile")"
+    tail -n +2 -- "$cachefile"
   else
     [[ -d "$rakedir" ]] && cd "$rakedir"
-    tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null | ruby -ne '~/^rake ([\S]+)/ and puts $1')"
-    (mkdir --parents "$cachedir" && echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
+    tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null |
+             awk '/^rake / { print $2 }')"
+    if [[ "$tasks" ]]; then
+      # attempt to ensure $cachedir exists and is a directory
+      # before writing to $cachefile
+      (rm -- "$cachedir";
+       mkdir --parents -- "$cachedir" &&
+       echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
+      echo "$tasks"
+    fi
   fi
-
-  echo "$tasks"
 }
 
 complete -F __rake -o default rake
