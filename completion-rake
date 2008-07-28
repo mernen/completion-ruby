@@ -39,7 +39,7 @@ __rake()
 
   if [[ "$cur" == *:* ]]; then
     # remove prefix
-    local prefix="${cur%%:*}:"
+    local prefix="${cur%:*}:"
     COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
 }
