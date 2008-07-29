@@ -123,7 +123,7 @@ __rake_tasks()
     if [[ "$tasks" ]]; then
       # attempt to ensure $cachedir exists and is a directory
       # before writing to $cachefile
-      (rm -- "$cachedir";
+      ([[ -f "$cachedir" ]] && rm -- "$cachedir";
        mkdir --parents -- "$cachedir" &&
        echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
       echo "$tasks"
