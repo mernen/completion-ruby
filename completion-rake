@@ -9,7 +9,7 @@
 
 __rake()
 {
-  local cmd="$1"
+  local rake_cmd="$1"
   # $2 returns just the part after the last colon
   local cur="${COMP_WORDS[$COMP_CWORD]}"
   local prev="$3"
@@ -118,8 +118,9 @@ __rake_tasks()
     tail -n +2 -- "$cachefile"
   else
     [[ -d "$rakedir" ]] && cd "$rakedir"
-    tasks="$(rake --rakefile "$rakefile" --silent --tasks 2>/dev/null |
-             awk '/^rake / { print $2 }')"
+    local rake_cmd="${rake_cmd:-rake}"
+    tasks="$("$rake_cmd" --rakefile "$rakefile" --silent --tasks 2>/dev/null |
+             awk '{ print $2 }')"
     if [[ "$tasks" ]]; then
       # attempt to ensure $cachedir exists and is a directory
       # before writing to $cachefile
