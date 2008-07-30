@@ -37,8 +37,10 @@ __rake()
       fi
   esac
 
+  # bash treats ":" as a path separator, borking our completion on
+  # namespaced tasks. We have to remove whatever the user already typed
+  # until the last colon
   if [[ "$cur" == *:* ]]; then
-    # remove prefix
     local prefix="${cur%:*}:"
     COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
@@ -73,7 +75,7 @@ __rake_get_rakefile()
 
   # look for rakefiles in the directory hierarchy
   # note that the command should run on the context of the directory where
-  # the rakefile is found, so $rakedir is set
+  # the rakefile is found, so $rakedir has to be set
   local fn
   pushd . >/dev/null
   while true; do
@@ -98,13 +100,13 @@ __rake_get_rakefile()
 #
 # Parameters can be passed either as environment variables `$rakefile` and
 # `$rakedir` or via positional arguments:
-#     __rake_tasks <rakefile> [rakedir]
+#     (__rake_tasks <rakefile> [rakedir])
 __rake_tasks()
 {
   local rakefile="${1:-$rakefile}"
   local rakedir="${2:-$rakedir}"
   [[ -f "$rakefile" ]] || return 1
-  rakefile="$(readlink -f -- "$rakefile")"
+  rakefile="$(readlink --canonicalize -- "$rakefile")"
 
   local cachedir="$HOME/.local"
   local cachefile="$cachedir/rake-completion-cache"
