@@ -3,7 +3,7 @@
 **completion-ruby** is a set of [bash][] scripts offering command-line
 completion for various [Ruby][]-related commands and tools.
 
-Currently, only [`rake`][] is supported, though. :(
+Currently, only [Rake][] is supported, though. :(
 
 ## Usage
 
