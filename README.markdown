@@ -1,11 +1,9 @@
 # completion-ruby: bash completion for Ruby-related commands
 
-**completion-ruby** is a set of [bash](http://www.gnu.org/software/bash/)
-scripts offering command-line completion for various
-[Ruby](http://www.ruby-lang.org/)-related commands and tools.
+**completion-ruby** is a set of [bash][] scripts offering command-line
+completion for various [Ruby][]-related commands and tools.
 
-Currently, only [rake](http://rubyforge.org/projects/rake) is supported,
-though. :(
+Currently, only [rake][] is supported, though. :(
 
 ## Usage
 
@@ -36,10 +34,16 @@ most common cases without overcomplicating or overthinking the code.
 Copyright (C) 2008 [Daniel Luz](http://mernen.com/).
 
 **completion-ruby** is distributed under the
-[MIT license](http://www.opensource.org/licenses/mit-license.php).
+[MIT license][].
 
-The source is available in a [Git](http://git.or.cz/) repository,
-which can be viewed at: <http://github.com/mernen/completion-ruby/>.
+The source is available in a [Git][] repository, [available at GitHub][repo].
 
-For up-to-date information, the permalink for this project is:
-<http://mernen.com/projects/completion-ruby>.
+For up-to-date information, visit [this project's permalink][permalink].
+
+[bash]: http://www.gnu.org/software/bash/ (Bourne-Again Shell)
+[Ruby]: http://www.ruby-lang.org/         (Ruby Programming Language)
+[rake]: http://rake.rubyforge.org/        (Rake — Ruby Make)
+[MIT license]: http://www.opensource.org/licenses/mit-license.php
+[Git]:  http://git.or.cz/                 (Git — Fast Version Control System)
+[repo]: http://github.com/mernen/completion-ruby/tree
+[permalink]: http://mernen.com/projects/completion-ruby
