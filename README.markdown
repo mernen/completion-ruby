@@ -3,7 +3,7 @@
 **completion-ruby** is a set of [bash][] scripts offering command-line
 completion for various [Ruby][]-related commands and tools.
 
-Currently, only [rake][] is supported, though. :(
+Currently, only [`rake`][] is supported, though. :(
 
 ## Usage
 
@@ -31,10 +31,9 @@ most common cases without overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright (C) 2008 [Daniel Luz](http://mernen.com/).
+Copyright (C) 2008 [Daniel Luz][].
 
-**completion-ruby** is distributed under the
-[MIT license][].
+**completion-ruby** is distributed under the [MIT license][].
 
 The source is available in a [Git][] repository, [available at GitHub][repo].
 
@@ -43,6 +42,7 @@ For up-to-date information, visit [this project's permalink][permalink].
 [bash]: http://www.gnu.org/software/bash/ (Bourne-Again Shell)
 [Ruby]: http://www.ruby-lang.org/         (Ruby Programming Language)
 [rake]: http://rake.rubyforge.org/        (Rake — Ruby Make)
+[Daniel Luz]:  http://mernen.com/
 [MIT license]: http://www.opensource.org/licenses/mit-license.php
 [Git]:  http://git.or.cz/                 (Git — Fast Version Control System)
 [repo]: http://github.com/mernen/completion-ruby/tree
