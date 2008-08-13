@@ -106,7 +106,7 @@ __rake_tasks()
   local rakefile="${1:-$rakefile}"
   local rakedir="${2:-$rakedir}"
   [[ -f "$rakefile" ]] || return 1
-  rakefile="$(readlink --canonicalize -- "$rakefile")"
+  rakefile="$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")"
 
   local cachedir="$HOME/.local/share/completion-cache"
   local cachefile="$cachedir/rake"
