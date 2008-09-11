@@ -1,3 +1,4 @@
+#! bash
 # bash completion for the `rake` command.
 #
 # Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
