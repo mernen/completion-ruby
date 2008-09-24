@@ -1,0 +1,36 @@
+#! bash
+# bash completion for the `rails` command and rails scripts.
+#
+# Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
+# Distributed under the MIT license.
+# http://mernen.com/projects/completion-ruby
+#
+# To use, source this file on bash:
+#   . completion-rails
+
+__rails_script_server()
+{
+  local cmd="$1"
+  # $2 returns just the part after the last colon
+  local cur="${COMP_WORDS[$COMP_CWORD]}"
+  local prev="$3"
+  COMPREPLY=()
+
+  case "$prev" in
+    -e | --environment)
+      # hardcoded list of environments... for now
+      local environments="development test production"
+      COMPREPLY=($(compgen -W "$environments" -- "$cur"))
+      return;;
+    *)
+      if [[ "$cur" == -* ]]; then
+        local options="
+          -p --port -b --binding -d --daemon -u --debugger
+	  -e --environment"
+        COMPREPLY=($(compgen -W "$options" -- "$cur"))
+      fi
+  esac
+}
+
+complete -F __rails_script_server -o default script/server
+# vim: ai ft=sh sw=2 sts=2 et
