@@ -3,14 +3,15 @@
 **completion-ruby** is a set of [bash][] scripts offering command-line
 completion for various [Ruby][]-related commands and tools.
 
-Currently, only [Rake][] is supported, though. :(
-
 ## Usage
 
-Save the `completion-rake` file somewhere and add the following line
-to your `~/.bashrc`:
+Save the completion files somewhere and add the following line to your
+`~/.bashrc`:
 
-    . /path/to/completion-rake
+    . /path/to/completion-ruby-all
+
+Additionally, you can just save the specific scripts you desire, and
+source them individually.
 
 ## Why yet another completion script?
 

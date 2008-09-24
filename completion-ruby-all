@@ -1,0 +1,15 @@
+# bash completion for various Ruby-related commands.
+#
+# Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
+# Distributed under the MIT license.
+# http://mernen.com/projects/completion-ruby
+#
+# This file automatically loads all other completions.
+# They all must be on the same directory for it to work.
+# To use, source this file on bash:
+#   . completion-ruby-all
+
+. "$(dirname "$BASH_ARGV")/completion-rake"
+. "$(dirname "$BASH_ARGV")/completion-rails"
+
+# vim: ai ft=sh sw=2 sts=2 et
