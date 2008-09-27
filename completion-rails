@@ -17,9 +17,7 @@ __rails_script_server() {
 
   case "$prev" in
     -e | --environment)
-      # hardcoded list of environments... for now
-      local environments="development test production"
-      COMPREPLY=($(compgen -W "$environments" -- "$cur"))
+      __rails_complete_environments "$cur"
       return;;
     *)
       if [[ "$cur" == -* ]]; then
@@ -29,6 +27,12 @@ __rails_script_server() {
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
       fi
   esac
+}
+
+__rails_complete_environments() {
+  # hardcoded list of environments... for now?
+  local environments="development test production"
+  COMPREPLY=($(compgen -W "$environments" -- "$1"))
 }
 
 complete -F __rails_script_server -o default script/server
