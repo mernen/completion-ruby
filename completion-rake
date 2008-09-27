@@ -8,8 +8,7 @@
 # To use, source this file on bash:
 #   . completion-rake
 
-__rake()
-{
+__rake() {
   local rake_cmd="$1"
   # $2 returns just the part after the last colon
   local cur="${COMP_WORDS[$COMP_CWORD]}"
@@ -56,8 +55,7 @@ __rake()
 # Since this function sets new variables, it must NOT run on a subshell.
 #
 # Note that `$rakefile` is also NOT guaranteed to be absolute!
-__rake_get_rakefile()
-{
+__rake_get_rakefile() {
   # look for --rakefile or -f
   # $rakedir is not defined in this case, regardless of where $rakefile lives
   local i
@@ -102,8 +100,7 @@ __rake_get_rakefile()
 # Parameters can be passed either as environment variables `$rakefile` and
 # `$rakedir` or via positional arguments:
 #     (__rake_tasks <rakefile> [rakedir])
-__rake_tasks()
-{
+__rake_tasks() {
   local rakefile="${1:-$rakefile}"
   local rakedir="${2:-$rakedir}"
   [[ -f "$rakefile" ]] || return 1

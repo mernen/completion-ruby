@@ -8,8 +8,7 @@
 # To use, source this file on bash:
 #   . completion-rails
 
-__rails_script_server()
-{
+__rails_script_server() {
   local cmd="$1"
   # $2 returns just the part after the last colon
   local cur="${COMP_WORDS[$COMP_CWORD]}"
