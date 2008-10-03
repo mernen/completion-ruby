@@ -9,7 +9,6 @@
 #   . completion-rake
 
 __rake() {
-  local rake_cmd="$1"
   # $2 returns just the part after the last colon
   local cur="${COMP_WORDS[$COMP_CWORD]}"
   local prev="$3"
