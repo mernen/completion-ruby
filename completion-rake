@@ -43,6 +43,12 @@ __rake() {
     local prefix="${cur%:*}:"
     COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
+
+  # append a space to all options...
+  COMPREPLY=("${COMPREPLY[@]/%/ }")
+
+  # ...and remove [parameters] from tasks
+  COMPREPLY=("${COMPREPLY[@]/[*/[}")
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
@@ -131,5 +137,5 @@ __rake_tasks() {
   fi
 }
 
-complete -F __rake -o default rake
+complete -F __rake -o default -o nospace rake
 # vim: ai ft=sh sw=2 sts=2 et
