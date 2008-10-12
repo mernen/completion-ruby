@@ -9,6 +9,7 @@
 # To use, source this file on bash:
 #   . completion-ruby-all
 
+. "$(dirname "$BASH_ARGV")/completion-gem"
 . "$(dirname "$BASH_ARGV")/completion-rails"
 . "$(dirname "$BASH_ARGV")/completion-rake"
 
