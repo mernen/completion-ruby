@@ -65,7 +65,7 @@ __rake_get_rakefile() {
   # $rakedir is not defined in this case, regardless of where $rakefile lives
   local i
   for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
-    arg="${COMP_WORDS[$i]}"
+    local arg="${COMP_WORDS[$i]}"
 
     case "$arg" in
       --rakefile | -f)

@@ -9,7 +9,7 @@
 # To use, source this file on bash:
 #   . completion-ruby-all
 
-. "$(dirname "$BASH_ARGV")/completion-rake"
 . "$(dirname "$BASH_ARGV")/completion-rails"
+. "$(dirname "$BASH_ARGV")/completion-rake"
 
 # vim: ai ft=sh sw=2 sts=2 et
