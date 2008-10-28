@@ -29,6 +29,27 @@ __rake() {
           -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
           -v --verbose -V --version"
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
+      elif [[ "$cur" == *'['* ]]; then
+        # parameter completion (using default compgen)
+        # $cur: example[param1,param2
+        # $args: param1,param2
+        local args="${cur#*[}"
+        # $last_arg: param2
+        local last_arg="${args##*,}"
+        # $prefix: example[param1,
+        local prefix="${cur%"$last_arg"}"
+
+        # ugh, ugly hack here, but I'm out of ideas
+        local old_ifs="$IFS" IFS=$'\n'
+        COMPREPLY=($(compgen -o default -- "$last_arg"))
+        local IFS="$old_ifs"
+        # escape space characters...
+        COMPREPLY=("${COMPREPLY[@]// /\ }")
+        # and prepend the prefix to all completion options
+        COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
+
+        # don't perform usual post-processing
+        return
       else
         local rakefile rakedir
         __rake_get_rakefile || return
