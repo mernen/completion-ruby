@@ -39,6 +39,9 @@ __gem() {
     help)
       choices="commands examples platforms $commands"
       ;;
+    uninstall | cleanup)
+      choices="$(__gem_installed_gems)"
+      ;;
   esac
   [[ "$cur" == -* ]] && choices="$options"
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
@@ -62,6 +65,11 @@ __gem_get_command() {
         return;;
     esac
   done
+}
+
+# Outputs a list of installed gems, one per line.
+__gem_installed_gems() {
+  gem list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
 }
 
 complete -F __gem -o default gem
