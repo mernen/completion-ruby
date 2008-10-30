@@ -10,7 +10,7 @@ Save the completion files somewhere and add the following line to your
 
     . /path/to/completion-ruby-all
 
-Additionally, you can just save the specific scripts you desire, and
+Alternatively, you can just save the specific scripts you wish, and
 source them individually.
 
 ## Why yet another completion script?
@@ -24,7 +24,8 @@ completion. None of them, though, at the same time:
 * worked on subdirectories of the project
 
 ...among other minor quirks. While providing all of the above, a few other
-niceties were added, like command-line options completion.
+niceties were added, like command-line options completion and awareness of
+task arguments.
 
 This script is not perfect (for instance, it won't update the cache if
 a dependency of the rakefile is updated), but it tries to cover all the
