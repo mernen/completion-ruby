@@ -82,6 +82,9 @@ __rails_complete_generators() {
 }
 
 complete -F __rails_script_server -o default script/server
+complete -F __rails_script_server -o default ./script/server
 complete -F __rails_script_console -o default script/console
+complete -F __rails_script_console -o default ./script/console
 complete -F __rails_script_generate -o default script/generate
+complete -F __rails_script_generate -o default ./script/generate
 # vim: ai ft=sh sw=2 sts=2 et
