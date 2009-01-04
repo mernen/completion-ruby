@@ -74,7 +74,7 @@ __gem_installed_gems() {
 }
 
 complete -F __gem -o default gem
-# Ruby 1.9 suffix on Debian distros
+complete -F __gem -o default gem1.8
 complete -F __gem -o default gem1.9
 # JRuby
 complete -F __gem -o default jgem
