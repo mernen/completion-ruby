@@ -9,6 +9,7 @@
 #   . completion-gem
 
 __gem() {
+  local cmd="$1"
   local cur="$2"
   local prev="$3"
   COMPREPLY=()
@@ -69,7 +70,7 @@ __gem_get_command() {
 
 # Outputs a list of installed gems, one per line.
 __gem_installed_gems() {
-  gem list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
+  "$cmd" list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
 }
 
 complete -F __gem -o default gem
