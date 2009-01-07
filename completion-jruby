@@ -40,7 +40,8 @@ __jruby() {
       ;;
     *)
       # non-switch arg, must be the script name
-      script_given=1;;
+      script_given=1
+      switches_accepted=;;
     esac
   done
 
