@@ -47,10 +47,12 @@ __jruby() {
   if [[ $switches_accepted && $cur == -* ]]; then
     COMPREPLY+=($(compgen -W "$options" -- "$cur"))
   elif [[ $script_in_path && ! $script_given ]]; then
-    local jruby_dir="$(dirname "$(which "$cmd")")"
-    local jruby_cmds=($(find "$jruby_dir" -maxdepth 1 -type f -perm +111))
-    jruby_cmds=("${jruby_cmds[@]##*/}")
-    COMPREPLY+=($(compgen -W "${jruby_cmds[*]}" -- "$cur"))
+    local jruby_dir="$(dirname "$(which "$cmd")" 2> /dev/null)"
+    if [[ -d $jruby_dir ]]; then
+      local jruby_cmds=($(find "$jruby_dir" -maxdepth 1 -type f -perm +111 2>/dev/null))
+      jruby_cmds=("${jruby_cmds[@]##*/}")
+      COMPREPLY+=($(compgen -W "${jruby_cmds[*]}" -- "$cur"))
+    fi
   fi
 }
 
