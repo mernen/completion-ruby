@@ -19,7 +19,9 @@ __rake() {
       # leave COMPREPLY blank, let the default handle it
       return;;
     -I | --libdir | -R | --rakelibdir)
-      # compgen -o dirnames isn't very good, so leave it at default too
+      _filedir -d
+      # suffix all entries with a slash
+      COMPREPLY=("${COMPREPLY[@]/%//}")
       return;;
     *)
       if [[ "$cur" == -* ]]; then
