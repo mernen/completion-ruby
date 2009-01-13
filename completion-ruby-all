@@ -13,5 +13,6 @@
 . "$(dirname "$BASH_ARGV")/completion-rails"
 . "$(dirname "$BASH_ARGV")/completion-rake"
 . "$(dirname "$BASH_ARGV")/completion-jruby"
+. "$(dirname "$BASH_ARGV")/completion-ruby"
 
 # vim: ai ft=sh sw=2 sts=2 et
