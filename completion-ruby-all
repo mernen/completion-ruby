@@ -9,10 +9,17 @@
 # To use, source this file on bash:
 #   . completion-ruby-all
 
-. "$(dirname "$BASH_ARGV")/completion-gem"
-. "$(dirname "$BASH_ARGV")/completion-rails"
-. "$(dirname "$BASH_ARGV")/completion-rake"
-. "$(dirname "$BASH_ARGV")/completion-jruby"
-. "$(dirname "$BASH_ARGV")/completion-ruby"
+# extra measure to avoid infinite recursion
+type _completion_ruby_init &>/dev/null && return 1
+
+_completion_ruby_init() {
+  local path=$(dirname "$BASH_ARGV") script
+
+  for script in "$path"/completion-*; do
+    [[ ! $script -ef $BASH_ARGV ]] && . "$script"
+  done
+}
+_completion_ruby_init
+unset -f _completion_ruby_init
 
 # vim: ai ft=sh sw=2 sts=2 et
