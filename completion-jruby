@@ -7,6 +7,8 @@
 #
 # To use, source this file on bash:
 #   . completion-jruby
+#
+# This script works best when completion-ruby is also loaded.
 
 __jruby() {
   local cmd="$1"
@@ -46,16 +48,23 @@ __jruby() {
   done
 
   if [[ $switches_accepted && $cur == -* ]]; then
-    COMPREPLY+=($(compgen -W "$options" -- "$cur"))
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
   elif [[ $script_in_path && ! $script_given ]]; then
     local jruby_dir="$(dirname "$(which "$cmd")" 2> /dev/null)"
     if [[ -d $jruby_dir ]]; then
       local jruby_cmds=($(find "$jruby_dir" -maxdepth 1 -type f -perm +111 2>/dev/null))
       jruby_cmds=("${jruby_cmds[@]##*/}")
-      COMPREPLY+=($(compgen -W "${jruby_cmds[*]}" -- "$cur"))
+      COMPREPLY=($(compgen -W "${jruby_cmds[*]}" -- "$cur"))
     fi
+  fi
+
+  # include `ruby` completion results, if available
+  if [[ $(type -t __ruby) == function ]]; then
+    local cr=("${COMPREPLY[@]}")
+    __ruby "$@"
+    COMPREPLY+=("${cr[@]}")
   fi
 }
 
-complete -F __jruby -o default jruby
+complete -F __jruby -o filenames -o default jruby
 # vim: ai ft=sh sw=2 sts=2 et
