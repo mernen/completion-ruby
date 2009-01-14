@@ -11,9 +11,9 @@
 # This script works best when completion-ruby is also loaded.
 
 __jruby() {
-  local cmd="$1"
-  local cur="$2"
-  local prev="$3"
+  local cmd=$1
+  local cur=$2
+  local prev=$3
   COMPREPLY=()
 
   local options="
@@ -25,7 +25,7 @@ __jruby() {
   local script_in_path
   local switches_accepted=1
   for ((i=1; i < $COMP_CWORD; ++i)); do
-    local arg="${COMP_WORDS[$i]}"
+    local arg=${COMP_WORDS[$i]}
 
     case "$arg" in
     -S)
@@ -36,7 +36,7 @@ __jruby() {
     --)
       # end of switches
       switches_accepted=
-      [[ "$COMP_CWORD" != $((i + 1)) ]] && script_given=1
+      [[ $COMP_CWORD != $((i + 1)) ]] && script_given=1
       break;;
     -*)
       ;;
@@ -50,7 +50,7 @@ __jruby() {
   if [[ $switches_accepted && $cur == -* ]]; then
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
   elif [[ $script_in_path && ! $script_given ]]; then
-    local jruby_dir="$(dirname "$(which "$cmd")" 2> /dev/null)"
+    local jruby_dir=$(dirname "$(which "$cmd")" 2>/dev/null)
     if [[ -d $jruby_dir ]]; then
       local jruby_cmds=($(find "$jruby_dir" -maxdepth 1 -type f -perm +111 2>/dev/null))
       jruby_cmds=("${jruby_cmds[@]##*/}")

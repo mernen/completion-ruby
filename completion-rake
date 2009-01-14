@@ -10,8 +10,8 @@
 
 __rake() {
   # $2 returns just the part after the last colon
-  local cur="${COMP_WORDS[$COMP_CWORD]}"
-  local prev="$3"
+  local cur=${COMP_WORDS[$COMP_CWORD]}
+  local prev=$3
   COMPREPLY=()
 
   case "$prev" in
@@ -24,27 +24,27 @@ __rake() {
       COMPREPLY=("${COMPREPLY[@]/%//}")
       return;;
     *)
-      if [[ "$cur" == -* ]]; then
+      if [[ $cur == -* ]]; then
         local options="
           -C --classic-namespace -D --describe -n --dry-run -h --help
           -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
           -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
           -v --verbose -V --version"
         COMPREPLY=($(compgen -W "$options" -- "$cur"))
-      elif [[ "$cur" == *'['* ]]; then
+      elif [[ $cur == *'['* ]]; then
         # parameter completion (using default compgen)
         # $cur: example[param1,param2
         # $args: param1,param2
-        local args="${cur#*[}"
+        local args=${cur#*[}
         # $last_arg: param2
-        local last_arg="${args##*,}"
+        local last_arg=${args##*,}
         # $prefix: example[param1,
-        local prefix="${cur%"$last_arg"}"
+        local prefix=${cur%"$last_arg"}
 
         # ugh, ugly hack here, but I'm out of ideas
-        local old_ifs="$IFS" IFS=$'\n'
+        local old_ifs=$IFS IFS=$'\n'
         COMPREPLY=($(compgen -o default -- "$last_arg"))
-        local IFS="$old_ifs"
+        local IFS=$old_ifs
         # escape space characters...
         COMPREPLY=("${COMPREPLY[@]// /\ }")
         # and prepend the prefix to all completion options
@@ -62,8 +62,8 @@ __rake() {
   # bash treats ":" as a path separator, borking our completion on
   # namespaced tasks. We have to remove whatever the user already typed
   # until the last colon
-  if [[ "$cur" == *:* ]]; then
-    local prefix="${cur%:*}:"
+  if [[ $cur == *:* ]]; then
+    local prefix=${cur%:*}:
     COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
 
@@ -88,14 +88,14 @@ __rake_get_rakefile() {
   # $rakedir is not defined in this case, regardless of where $rakefile lives
   local i
   for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
-    local arg="${COMP_WORDS[$i]}"
+    local arg=${COMP_WORDS[$i]}
 
     case "$arg" in
       --rakefile | -f)
-        rakefile="${COMP_WORDS[$(($i + 1))]}"
+        rakefile=${COMP_WORDS[$(($i + 1))]}
         return;;
       --rakefile=* | -f=*)
-        rakefile="${arg#*=}"
+        rakefile=${arg#*=}
         return;;
     esac
   done
@@ -104,18 +104,18 @@ __rake_get_rakefile() {
   # note that the command should run on the context of the directory where
   # the rakefile is found, so $rakedir has to be set
   local fn
-  pushd . >/dev/null
+  pushd . &>/dev/null
   while true; do
     for fn in rakefile Rakefile; do
-      if [[ -f "$fn" ]]; then
-        rakedir="$(pwd)"
-        rakefile="$rakedir/$fn"
-        popd >/dev/null
+      if [[ -f $fn ]]; then
+        rakedir=$(pwd)
+        rakefile=$rakedir/$fn
+        popd &>/dev/null
         return
       fi
     done
     cd ..
-    [[ "$(pwd)" == "/" ]] && break
+    [[ $(pwd) == / ]] && break
   done
 
   popd >/dev/null
@@ -129,30 +129,30 @@ __rake_get_rakefile() {
 # `$rakedir` or via positional arguments:
 #     (__rake_tasks <rakefile> [rakedir])
 __rake_tasks() {
-  local rakefile="${1:-$rakefile}"
-  local rakedir="${2:-$rakedir}"
-  [[ -f "$rakefile" ]] || return 1
-  rakefile="$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")"
+  local rakefile=${1:-$rakefile}
+  local rakedir=${2:-$rakedir}
+  [[ -f $rakefile ]] || return 1
+  rakefile=$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")
 
-  local cachedir="$HOME/.local/share/completion-cache"
-  local cachefile="$cachedir/rake"
+  local cachedir=$HOME/.local/share/completion-cache
+  local cachefile=$cachedir/rake
   # uncomment the following lines if you prefer individual caches:
-##  local cachedir="$HOME/.local/share/completion-cache/rake"
-##  local cachefile="$cachedir/${rakefile//\//%}"
+##  local cachedir=$HOME/.local/share/completion-cache/rake
+##  local cachefile=$cachedir/${rakefile//\//%}
 
   local tasks
-  if [[ "$cachefile" -nt "$rakefile" &&
-        "$(head -n 1 -- "$cachefile")" == "$rakefile" ]]; then
+  if [[ $cachefile -nt $rakefile &&
+        $(head -n 1 -- "$cachefile") == $rakefile ]]; then
     tail -n +2 -- "$cachefile"
   else
-    [[ -d "$rakedir" ]] && cd "$rakedir"
-    local rake_cmd="${rake_cmd:-rake}"
-    tasks="$("$rake_cmd" --rakefile "$rakefile" --silent --tasks 2>/dev/null |
-             awk '{ print $2 }')"
-    if [[ "$tasks" ]]; then
+    [[ -d $rakedir ]] && cd "$rakedir"
+    local rake_cmd=${rake_cmd:-rake}
+    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --tasks 2>/dev/null |
+            awk '{ print $2 }')
+    if [[ $tasks ]]; then
       # attempt to ensure $cachedir exists and is a directory
       # before writing to $cachefile
-      ([[ -f "$cachedir" ]] && rm -- "$cachedir";
+      ([[ -f $cachedir ]] && rm -- "$cachedir";
        mkdir -p -- "$cachedir" &&
        echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
       echo "$tasks"

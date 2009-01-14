@@ -9,9 +9,9 @@
 #   . completion-gem
 
 __gem() {
-  local cmd="$1"
-  local cur="$2"
-  local prev="$3"
+  local cmd=$1
+  local cur=$2
+  local prev=$3
   COMPREPLY=()
 
   local options="
@@ -35,23 +35,23 @@ __gem() {
   local choices
   case "$gem_command" in
     "")
-      choices="$commands"
+      choices=$commands
       ;;
     help)
       choices="commands examples platforms $commands"
       ;;
     uninstall | cleanup)
-      choices="$(__gem_installed_gems)"
+      choices=$(__gem_installed_gems)
       ;;
   esac
-  [[ "$cur" == -* ]] && choices="$options"
+  [[ $cur == -* ]] && choices=$options
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
 }
 
 __gem_get_command() {
   local i
   for ((i=1; i < $COMP_CWORD; ++i)); do
-    local arg="${COMP_WORDS[$i]}"
+    local arg=${COMP_WORDS[$i]}
 
     case "$arg" in
       -h | --help | -v | --version)
@@ -62,7 +62,7 @@ __gem_get_command() {
         # skip argument
         ((++i));;
       [^-]*)
-        gem_command="$arg"
+        gem_command=$arg
         return;;
     esac
   done
