@@ -5,13 +5,24 @@ completion for various [Ruby][]-related commands and tools.
 
 ## Usage
 
-Save the completion files somewhere and add the following line to your
-`~/.bashrc`:
+Save the completion files somewhere (in the same directory) and add the
+following line to your `~/.bashrc` or `~/.profile`:
 
     . /path/to/completion-ruby-all
 
+The `completion-ruby-all` script loads all the completions it finds,
+but only for the commands you appear to have installed.
 Alternatively, you can just save the specific scripts you wish, and
 source them individually.
+
+These scripts have a slight dependency on `bash-completion`. It should
+be part of pretty much any modern Linux distribution, and you can
+install it on OS X using [MacPorts][]:
+
+    sudo port install bash-completion
+
+It's a dependency of [Git][]'s completion too, so if you have that
+working already you should be fine.
 
 ## Why yet another completion script?
 
@@ -28,8 +39,9 @@ niceties were added, like command-line options completion and awareness of
 task arguments.
 
 This script is not perfect (for instance, it won't update the cache if
-a dependency of the rakefile is updated), but it tries to cover all the
-most common cases without overcomplicating or overthinking the code.
+a dependency of the rakefile is updated; as a workaround, simply `touch`
+the Rakefile), but it tries to cover all the most common cases without
+overcomplicating or overthinking the code.
 
 ## License and website
 
@@ -47,5 +59,6 @@ For up-to-date information, visit [this project's permalink][permalink].
 [Daniel Luz]:  http://mernen.com/
 [MIT license]: http://www.opensource.org/licenses/mit-license.php
 [Git]:  http://git.or.cz/                 (Git — Fast Version Control System)
+[MacPorts]: http://www.macports.org/      (The MacPorts Project)
 [repo]: http://github.com/mernen/completion-ruby/tree
 [permalink]: http://mernen.com/projects/completion-ruby
