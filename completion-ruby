@@ -19,8 +19,7 @@ __ruby() {
     --copyright --version --help"
 
   local i
-  local script_given
-  local script_in_path
+  local script_given script_in_path
   local switches_accepted=1
   local complete_dirs
   for ((i=1; i < $COMP_CWORD; ++i)); do
@@ -35,17 +34,20 @@ __ruby() {
     -S)
       script_in_path=1;;
     -e)
-      script_given=1;;
+      script_given=1
+      ((i++));;
     -h | --help)
       switches_accepted=""
       script_given=1;;
     -C | -I)
-      [[ $COMP_CWORD == $((i + 1)) ]] && complete_dirs=1;;
-    --) ;;
+      [[ $COMP_CWORD == $((i + 1)) ]] && complete_dirs=1
+      ((i++));;
+    -*) ;;
     *)
       # non-switch arg, must be the script name
       script_given=1
-      switches_accepted="";;
+      switches_accepted=""
+      break;;
     esac
   done
 
