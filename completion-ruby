@@ -64,7 +64,5 @@ __ruby() {
   fi
 }
 
-complete -F __ruby -o filenames -o default ruby
-complete -F __ruby -o filenames -o default ruby1.8
-complete -F __ruby -o filenames -o default ruby1.9
+complete -F __ruby -o filenames -o default ruby ruby1.8 ruby1.9
 # vim: ai ft=sh sw=2 sts=2 et

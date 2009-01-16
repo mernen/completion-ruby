@@ -73,9 +73,5 @@ __gem_installed_gems() {
   "$cmd" list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
 }
 
-complete -F __gem -o default gem
-complete -F __gem -o default gem1.8
-complete -F __gem -o default gem1.9
-# JRuby
-complete -F __gem -o default jgem
+complete -F __gem -o default gem gem1.8 gem1.9 jgem
 # vim: ai ft=sh sw=2 sts=2 et

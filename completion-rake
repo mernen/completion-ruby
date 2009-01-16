@@ -160,7 +160,5 @@ __rake_tasks() {
   fi
 }
 
-complete -F __rake -o default -o nospace rake
-complete -F __rake -o default -o nospace rake1.8
-complete -F __rake -o default -o nospace rake1.9
+complete -F __rake -o default -o nospace rake rake1.8 rake1.9
 # vim: ai ft=sh sw=2 sts=2 et
