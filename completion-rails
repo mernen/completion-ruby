@@ -8,6 +8,29 @@
 # To use, source this file on bash:
 #   . completion-rails
 
+__rails() {
+  local cur=$2
+  local prev=$3
+  COMPREPLY=()
+
+  case "$prev" in
+    -r | --ruby)
+      # leave it to complete the path to a binary
+      return;;
+    -d | --database)
+      local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
+      COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
+      return;;
+  esac
+
+  if [[ $cur == -* ]]; then
+    local options="
+      -r --ruby -d --database -f --freeze -v --version -h --help -p --pretend
+      --force -s --skip -q --quiet -t --backtrace -c --svn -g --git"
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
+  fi
+}
+
 __rails_script_server() {
   local cur=$2
   local prev=$3
@@ -80,6 +103,7 @@ __rails_complete_generators() {
   COMPREPLY=($(compgen -W "$generators" -- "$1"))
 }
 
+complete -F __rails -o default rails
 complete -F __rails_script_server -o default script/server ./script/server
 complete -F __rails_script_console -o default script/console ./script/console
 complete -F __rails_script_generate -o default script/generate ./script/generate
