@@ -50,6 +50,7 @@ __rake() {
         # and prepend the prefix to all completion options
         COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
 
+        __rake_remove_namespaces
         # don't perform usual post-processing
         return
       else
@@ -59,19 +60,23 @@ __rake() {
       fi
   esac
 
-  # bash treats ":" as a path separator, borking our completion on
-  # namespaced tasks. We have to remove whatever the user already typed
-  # until the last colon
-  if [[ $cur == *:* ]]; then
-    local prefix=${cur%:*}:
-    COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
-  fi
+  __rake_remove_namespaces
 
   # append a space to all options...
   COMPREPLY=("${COMPREPLY[@]/%/ }")
 
   # ...and remove [parameters] from tasks
   COMPREPLY=("${COMPREPLY[@]/[*/[}")
+}
+
+# bash treats ":" as a path separator, borking our completion on
+# namespaced tasks. This function removes whatever the user already typed
+# until the last colon.
+__rake_remove_namespaces() {
+  if [[ $cur == *:* ]]; then
+    local prefix=${cur%:*}:
+    COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
+  fi
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
