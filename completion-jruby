@@ -27,7 +27,7 @@ __jruby() {
   for ((i=1; i < $COMP_CWORD; ++i)); do
     local arg=${COMP_WORDS[$i]}
 
-    case "$arg" in
+    case $arg in
     -S)
       script_in_path=1;;
     -S*)

@@ -14,50 +14,50 @@ __rake() {
   local prev=$3
   COMPREPLY=()
 
-  case "$prev" in
-    -f | --rakefile | -r | --require)
-      # leave COMPREPLY blank, let the default handle it
-      return;;
-    -I | --libdir | -R | --rakelibdir)
-      _filedir -d
-      # suffix all entries with a slash
-      COMPREPLY=("${COMPREPLY[@]/%//}")
-      return;;
-    *)
-      if [[ $cur == -* ]]; then
-        local options="
-          -C --classic-namespace -D --describe -n --dry-run -h --help
-          -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
-          -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
-          -v --verbose -V --version"
-        COMPREPLY=($(compgen -W "$options" -- "$cur"))
-      elif [[ $cur == *'['* ]]; then
-        # parameter completion (using default compgen)
-        # $cur: example[param1,param2
-        # $args: param1,param2
-        local args=${cur#*[}
-        # $last_arg: param2
-        local last_arg=${args##*,}
-        # $prefix: example[param1,
-        local prefix=${cur%"$last_arg"}
+  case $prev in
+  -f | --rakefile | -r | --require)
+    # leave COMPREPLY blank, let the default handle it
+    return;;
+  -I | --libdir | -R | --rakelibdir)
+    _filedir -d
+    # suffix all entries with a slash
+    COMPREPLY=("${COMPREPLY[@]/%//}")
+    return;;
+  *)
+    if [[ $cur == -* ]]; then
+      local options="
+        -C --classic-namespace -D --describe -n --dry-run -h --help
+        -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
+        -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
+        -v --verbose -V --version"
+      COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    elif [[ $cur == *'['* ]]; then
+      # parameter completion (using default compgen)
+      # $cur: example[param1,param2
+      # $args: param1,param2
+      local args=${cur#*[}
+      # $last_arg: param2
+      local last_arg=${args##*,}
+      # $prefix: example[param1,
+      local prefix=${cur%"$last_arg"}
 
-        # ugh, ugly hack here, but I'm out of ideas
-        local old_ifs=$IFS IFS=$'\n'
-        COMPREPLY=($(compgen -o default -- "$last_arg"))
-        local IFS=$old_ifs
-        # escape space characters...
-        COMPREPLY=("${COMPREPLY[@]// /\ }")
-        # and prepend the prefix to all completion options
-        COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
+      # ugh, ugly hack here, but I'm out of ideas
+      local old_ifs=$IFS IFS=$'\n'
+      COMPREPLY=($(compgen -o default -- "$last_arg"))
+      local IFS=$old_ifs
+      # escape space characters...
+      COMPREPLY=("${COMPREPLY[@]// /\ }")
+      # and prepend the prefix to all completion options
+      COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
 
-        __rake_remove_namespaces
-        # don't perform usual post-processing
-        return
-      else
-        local rakefile rakedir
-        __rake_get_rakefile || return
-        COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
-      fi
+      __rake_remove_namespaces
+      # don't perform usual post-processing
+      return
+    else
+      local rakefile rakedir
+      __rake_get_rakefile || return
+      COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
+    fi
   esac
 
   __rake_remove_namespaces
@@ -95,13 +95,13 @@ __rake_get_rakefile() {
   for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
     local arg=${COMP_WORDS[$i]}
 
-    case "$arg" in
-      --rakefile | -f)
-        rakefile=${COMP_WORDS[$(($i + 1))]}
-        return;;
-      --rakefile=* | -f=*)
-        rakefile=${arg#*=}
-        return;;
+    case $arg in
+    --rakefile | -f)
+      rakefile=${COMP_WORDS[$(($i + 1))]}
+      return;;
+    --rakefile=* | -f=*)
+      rakefile=${arg#*=}
+      return;;
     esac
   done
 

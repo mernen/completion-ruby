@@ -26,23 +26,20 @@ __gem() {
   local gem_command
   __gem_get_command
 
-  case "$prev" in
-    --config-file)
-      # leave COMPREPLY blank, let the default handle it
-      return;;
+  case $prev in
+  --config-file)
+    # leave COMPREPLY blank, let the default handle it
+    return;;
   esac
 
   local choices
-  case "$gem_command" in
-    "")
-      choices=$commands
-      ;;
-    help)
-      choices="commands examples platforms $commands"
-      ;;
-    uninstall | cleanup)
-      choices=$(__gem_installed_gems)
-      ;;
+  case $gem_command in
+  "")
+    choices=$commands;;
+  help)
+    choices="commands examples platforms $commands";;
+  uninstall | cleanup)
+    choices=$(__gem_installed_gems);;
   esac
   [[ $cur == -* ]] && choices=$options
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
@@ -53,17 +50,17 @@ __gem_get_command() {
   for ((i=1; i < $COMP_CWORD; ++i)); do
     local arg=${COMP_WORDS[$i]}
 
-    case "$arg" in
-      -h | --help | -v | --version)
-        # these two options are command-killers
-        gem_command=-
-        return;;
-      --config-file)
-        # skip argument
-        ((++i));;
-      [^-]*)
-        gem_command=$arg
-        return;;
+    case $arg in
+    -h | --help | -v | --version)
+      # these two options are command-killers
+      gem_command=-
+      return;;
+    --config-file)
+      # skip argument
+      ((++i));;
+    [^-]*)
+      gem_command=$arg
+      return;;
     esac
   done
 }

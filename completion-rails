@@ -13,14 +13,14 @@ __rails() {
   local prev=$3
   COMPREPLY=()
 
-  case "$prev" in
-    -r | --ruby)
-      # leave it to complete the path to a binary
-      return;;
-    -d | --database)
-      local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
-      COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
-      return;;
+  case $prev in
+  -r | --ruby)
+    # leave it to complete the path to a binary
+    return;;
+  -d | --database)
+    local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
+    COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
+    return;;
   esac
 
   if [[ $cur == -* ]]; then
@@ -36,16 +36,16 @@ __rails_script_server() {
   local prev=$3
   COMPREPLY=()
 
-  case "$prev" in
-    -e | --environment)
-      __rails_complete_environments "$cur"
-      return;;
-    *)
-      if [[ $cur == -* ]]; then
-        local options="
-          -p --port -b --binding -d --daemon -u --debugger -e --environment"
-        COMPREPLY=($(compgen -W "$options" -- "$cur"))
-      fi
+  case $prev in
+  -e | --environment)
+    __rails_complete_environments "$cur"
+    return;;
+  *)
+    if [[ $cur == -* ]]; then
+      local options="
+        -p --port -b --binding -d --daemon -u --debugger -e --environment"
+      COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    fi
   esac
 }
 

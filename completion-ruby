@@ -25,7 +25,7 @@ __ruby() {
   for ((i=1; i < $COMP_CWORD; ++i)); do
     local arg=${COMP_WORDS[$i]}
 
-    case "$arg" in
+    case $arg in
     --)
       # end of switches
       switches_accepted=""
