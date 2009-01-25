@@ -21,8 +21,8 @@ install it on OS X using [MacPorts][]:
 
     sudo port install bash-completion
 
-It's a dependency of [Git][]'s completion too, so if you have that
-working already you should be fine.
+This script is a dependency of [Git][]'s completion too, so if you have
+that working already you should be fine.
 
 ## Why yet another completion script?
 
