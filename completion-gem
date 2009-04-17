@@ -17,11 +17,6 @@ __gem() {
   local options="
     -h --help -v --version -V --verbose --no-verbose -q --quiet
     --config-file --backtrace --debug"
-  local commands="
-    build cert check cleanup contents dependency environment fetch
-    generate_index help install list lock mirror outdated pristine
-    query rdoc search server sources specification stale uninstall
-    unpack update which"
 
   local gem_command
   __gem_get_command
@@ -35,7 +30,7 @@ __gem() {
   local choices
   case $gem_command in
   "")
-    choices=$commands;;
+    choices=$(__gem_available_commands);;
   help)
     choices="commands examples platforms $commands";;
   uninstall | cleanup)
@@ -45,6 +40,8 @@ __gem() {
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
 }
 
+# Stores in $gem_command the name of the gem command currently in use.
+# If no command is found, the variable is not set.
 __gem_get_command() {
   local i
   for ((i=1; i < $COMP_CWORD; ++i)); do
@@ -68,6 +65,11 @@ __gem_get_command() {
 # Outputs a list of installed gems, one per line.
 __gem_installed_gems() {
   "$cmd" list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
+}
+
+# Outputs a list of available commands, one per line.
+__gem_available_commands() {
+  "$cmd" help commands | awk '/^ {4}([^ ]+)/ { print $1 }'
 }
 
 complete -F __gem -o default gem gem1.8 gem1.9 jgem
