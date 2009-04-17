@@ -69,7 +69,7 @@ __gem_installed_gems() {
 
 # Outputs a list of available commands, one per line.
 __gem_available_commands() {
-  "$cmd" help commands | awk '/^ {4}([^ ]+)/ { print $1 }'
+  "$cmd" help commands | awk '/^    [^ ]/ { print $1 }'
 }
 
 complete -F __gem -o default gem gem1.8 gem1.9 jgem
