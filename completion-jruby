@@ -18,7 +18,7 @@ __jruby() {
 
   local options="
     -b -J --debug --jdb --properties --sample --client --server --manager
-    --headless --1.8 --1.9 --bytecode -X-O -X+O -X-C -X+C"
+    --headless --1.8 --1.9 --bytecode -X-O -X+O -X-C -X+C --fast"
 
   local i
   local script_given
