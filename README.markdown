@@ -21,7 +21,7 @@ install it on OS X using [MacPorts][]:
 
     sudo port install bash-completion
 
-This script is a dependency of [Git][]'s completion too, so if you have
+`bash-completion` is a dependency of [Git][]'s completion too, so if you have
 that working already you should be fine.
 
 ## Why yet another completion script?
@@ -39,13 +39,13 @@ niceties were added, like command-line options completion and awareness of
 task arguments.
 
 This script is not perfect (for instance, it won't update the cache if
-a dependency of the rakefile is updated; as a workaround, simply `touch`
-the Rakefile), but it tries to cover all the most common cases without
+a dependency of the rakefile is updated; as a workaround, simply
+`touch Rakefile`), but it tries to cover all the most common cases without
 overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright (C) 2008 [Daniel Luz][].
+Copyright © 2008 [Daniel Luz][].
 
 **completion-ruby** is distributed under the [MIT license][].
 
@@ -58,7 +58,7 @@ For up-to-date information, visit [this project's permalink][permalink].
 [rake]: http://rake.rubyforge.org/        (Rake — Ruby Make)
 [Daniel Luz]:  http://mernen.com/
 [MIT license]: http://www.opensource.org/licenses/mit-license.php
-[Git]:  http://git.or.cz/                 (Git — Fast Version Control System)
+[Git]:  http://git-scm.com/               (Git — Fast Version Control System)
 [MacPorts]: http://www.macports.org/      (The MacPorts Project)
 [repo]: http://github.com/mernen/completion-ruby/tree
 [permalink]: http://mernen.com/projects/completion-ruby
