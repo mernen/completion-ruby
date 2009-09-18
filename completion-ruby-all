@@ -13,12 +13,21 @@
 type _completion_ruby_init &>/dev/null && return 1
 
 _CR_PATH=$(dirname "$BASH_ARGV")
+# _cr_anycmd <command> [command...]
+# Returns success if any of the given commands is found, nonzero if
+# none of them exists.
+_cr_anycmd() {
+  for cmd in "$@"; do
+    type -- "$cmd" &>/dev/null && return
+  done
+  return 1
+}
 # _cr_load <script> [additional commands]
 # Sources completion-<script>, if the file exists and either <script> or
 # any of the additional parameters names an existing command.
 _cr_load() {
   local script=$_CR_PATH/completion-$1
-  [[ -f $script ]] && type "$@" &>/dev/null && . "$script"
+  [[ -f $script ]] && _cr_anycmd "$@" && . "$script"
 }
 
 _cr_load gem gem1.8 gem1.9 jgem
@@ -27,7 +36,7 @@ _cr_load rails
 _cr_load rake
 _cr_load ruby ruby1.8 ruby1.9
 
-unset -f _cr_load
+unset -f _cr_load _cr_anycmd
 unset -v _CR_PATH
 
 # vim: ai ft=sh sw=2 sts=2 et
