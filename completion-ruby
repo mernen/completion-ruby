@@ -52,13 +52,15 @@ __ruby() {
   done
 
   if [[ $complete_dirs ]]; then
-    _filedir -d
+    if type -t _filedir >/dev/null; then
+      _filedir -d
+    fi
   elif [[ $switches_accepted && $cur == -* ]]; then
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
   elif [[ ! $script_given ]]; then
     if [[ $script_in_path ]]; then
       COMPREPLY=($(compgen -c -- "$cur"))
-    else
+    elif type -t _filedir >/dev/null; then
       _filedir rb
     fi
   fi

@@ -19,9 +19,11 @@ __rake() {
     # leave COMPREPLY blank, let the default handle it
     return;;
   -I | --libdir | -R | --rakelibdir)
-    _filedir -d
-    # suffix all entries with a slash
-    COMPREPLY=("${COMPREPLY[@]/%//}")
+    if type -t _filedir >/dev/null; then
+      _filedir -d
+      # suffix all entries with a slash
+      COMPREPLY=("${COMPREPLY[@]/%//}")
+    fi
     return;;
   *)
     if [[ $cur == -* ]]; then
