@@ -32,7 +32,7 @@ __gem() {
   "")
     choices=$(__gem_available_commands);;
   help)
-    choices="commands examples platforms $commands";;
+    choices="commands examples platforms $(__gem_available_commands)";;
   uninstall | cleanup)
     choices=$(__gem_installed_gems);;
   esac
