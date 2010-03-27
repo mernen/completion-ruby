@@ -21,11 +21,14 @@ __gem() {
   local gem_command
   __gem_get_command
 
-  case $prev in
-  --config-file)
+  if [[ $prev == --config-file ]]; then
     # leave COMPREPLY blank, let the default handle it
-    return;;
-  esac
+    return
+  elif [[ $prev == --*dir || ${COMP_WORDS[$COMP_CWORD]} == --*dir=* ]]; then
+    # assume any option ending in 'dir' takes a directory name
+    type -t _filedir >/dev/null && _filedir -d "$cur"
+    return
+  fi
 
   local choices
   case $gem_command in
