@@ -14,10 +14,6 @@ __gem() {
   local prev=$3
   COMPREPLY=()
 
-  local options="
-    -h --help -v --version -V --verbose --no-verbose -q --quiet
-    --config-file --backtrace --debug"
-
   local gem_command
   __gem_get_command
 
@@ -31,15 +27,43 @@ __gem() {
   fi
 
   local choices
-  case $gem_command in
-  "")
-    choices=$(__gem_available_commands);;
-  help)
-    choices="commands examples platforms $(__gem_available_commands)";;
-  uninstall | cleanup)
-    choices=$(__gem_installed_gems);;
-  esac
-  [[ $cur == -* ]] && choices=$options
+  if [[ $cur == -* ]]; then
+    if [[ -z $gem_command ]]; then
+      choices="-h --help -v --version"
+    else
+      # perform `gem help $gem_command`, scan output for options
+
+      # gem help output starts option sections with a header like
+      # "  Common Options:", followed by lines indented with at least
+      # four spaces, one or more forms for the same option, a couple
+      # alignment spaces, and a description.
+      # We assume a header that doesn't mention "Options" denotes the
+      # end of the list of options.
+      # Also, some options come with optional parts, like "--[no-]ri";
+      # we first emit the version with these parts included, then omit
+      # them.
+      choices=$("$cmd" help "$gem_command" 2>/dev/null |
+                ruby -ne 'if /^  (\S.*):/
+                            exit unless $1.include? "Options"
+                          elsif /^ {4,}((?:-[-\w\[\],]+ )+)/
+                            $1.gsub(",", " ").split.each do |opt|
+                              # print option with optional parts
+                              puts opt.gsub(/[\[\]]/, "")
+                              # print also version w/o optionals if available
+                              opt.gsub!(/\[[^\]]+\]/, "") and puts opt
+                            end
+                          end')
+    fi
+  else
+    case $gem_command in
+    "")
+      choices=$(__gem_available_commands);;
+    help)
+      choices="commands examples platforms $(__gem_available_commands)";;
+    uninstall | cleanup)
+      choices=$(__gem_installed_gems);;
+    esac
+  fi
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
 }
 
@@ -52,7 +76,7 @@ __gem_get_command() {
 
     case $arg in
     -h | --help | -v | --version)
-      # these two options are command-killers
+      # these options are command-killers
       gem_command=-
       return;;
     --config-file)
