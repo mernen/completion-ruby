@@ -30,6 +30,9 @@ __gem() {
   if [[ $cur == -* ]]; then
     if [[ -z $gem_command ]]; then
       choices="-h --help -v --version"
+    elif [[ $gem_command == - ]]; then
+      # no options for --help, --version
+      choices=""
     else
       # perform `gem help $gem_command`, scan output for options
 
