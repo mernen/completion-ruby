@@ -94,12 +94,12 @@ __gem_get_command() {
 
 # Outputs a list of installed gems, one per line.
 __gem_installed_gems() {
-  "$cmd" list --local --no-details | awk '/^[^ ]+ \(/ { print $1 }'
+  "$cmd" list --local --no-details 2>/dev/null | awk '/^[^ ]+ \(/ { print $1 }'
 }
 
 # Outputs a list of available commands, one per line.
 __gem_available_commands() {
-  "$cmd" help commands | awk '/^    [^ ]/ { print $1 }'
+  "$cmd" help commands 2>/dev/null | awk '/^    [^ ]/ { print $1 }'
 }
 
 complete -F __gem -o default gem gem1.8 gem1.9 jgem
