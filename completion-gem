@@ -28,35 +28,15 @@ __gem() {
 
   local choices
   if [[ $cur == -* ]]; then
-    if [[ -z $gem_command ]]; then
-      choices="-h --help -v --version"
-    elif [[ $gem_command == - ]]; then
+    case $gem_command in
+    "")
+      choices="-h --help -v --version";;
+    -)
       # no options for --help, --version
-      choices=""
-    else
-      # perform `gem help $gem_command`, scan output for options
-
-      # gem help output starts option sections with a header like
-      # "  Common Options:", followed by lines indented with at least
-      # four spaces, one or more forms for the same option, a couple
-      # alignment spaces, and a description.
-      # We assume a header that doesn't mention "Options" denotes the
-      # end of the list of options.
-      # Also, some options come with optional parts, like "--[no-]ri";
-      # we first emit the version with these parts included, then omit
-      # them.
-      choices=$("$cmd" help "$gem_command" 2>/dev/null |
-                ruby -ne 'if /^  (\S.*):/
-                            exit unless $1.include? "Options"
-                          elsif /^ {4,}((?:-[-\w\[\],]+ )+)/
-                            $1.gsub(",", " ").split.each do |opt|
-                              # print option with optional parts
-                              puts opt.gsub(/[\[\]]/, "")
-                              # print also version w/o optionals if available
-                              opt.gsub!(/\[[^\]]+\]/, "") and puts opt
-                            end
-                          end')
-    fi
+      ;;
+    *)
+      choices=$(__gem_command_options "$gem_command")
+    esac
   else
     case $gem_command in
     "")
@@ -100,6 +80,31 @@ __gem_installed_gems() {
 # Outputs a list of available commands, one per line.
 __gem_available_commands() {
   "$cmd" help commands 2>/dev/null | awk '/^    [^ ]/ { print $1 }'
+}
+
+# Performs `gem help $1`, scans output for options, emits them one per line.
+__gem_command_options() {
+  # gem help output starts option sections with a header like
+  # "  Common Options:", followed by lines indented with at least
+  # four spaces, one or more forms for the same option, a couple
+  # alignment spaces, and a description.
+  # We assume a header that doesn't mention "Options" denotes the
+  # end of the list of options.
+  # Also, some options come with optional parts, like "--[no-]ri";
+  # we first emit the version with these parts included, then omit
+  # them.
+  "$cmd" help "$1" 2>/dev/null |
+    ruby -ne '
+      if /^  (\S.*):/
+        exit unless $1.include? "Options"
+      elsif /^ {4,}((?:-[-\w\[\],]+ )+)/
+        $1.gsub(",", " ").split.each do |opt|
+          # print option with optional parts
+          puts opt.gsub(/[\[\]]/, "")
+          # print also version w/o optionals if available
+          opt.gsub!(/\[[^\]]+\]/, "") and puts opt
+        end
+      end' 2>/dev/null
 }
 
 complete -F __gem -o default gem gem1.8 gem1.9 jgem
