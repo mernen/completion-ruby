@@ -15,13 +15,13 @@ but only for the commands you appear to have installed.
 Alternatively, you can just save the specific scripts you wish, and
 source them individually.
 
-These scripts have a slight dependency on `bash-completion`. It should
-be part of pretty much any modern Linux distribution, and you can
-install it on OS X using [MacPorts][]:
+These scripts offer improved directory completion when `bash-completion` is
+available. It should be part of pretty much any modern Linux distribution,
+and you can install it on OS X using [MacPorts][]:
 
     sudo port install bash-completion
 
-`bash-completion` is a dependency of [Git][]'s completion too, so if you have
+`bash-completion` is a dependency of [Git][]'s completion, so if you have
 that working already you should be fine.
 
 ## Why yet another completion script?
@@ -49,7 +49,7 @@ Copyright © 2008-2010 [Daniel Luz][].
 
 **completion-ruby** is distributed under the [MIT license][].
 
-The source is available in a [Git][] repository, [available at GitHub][repo].
+The source is available in a [Git][] repository [at GitHub][repo].
 
 For up-to-date information, visit [this project's permalink][permalink].
 
