@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `gem` command.
 #
-# Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2008-2010 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
