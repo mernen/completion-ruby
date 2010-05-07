@@ -45,6 +45,9 @@ __gem() {
       choices="commands examples platforms $(__gem_available_commands)";;
     uninstall | cleanup)
       choices=$(__gem_installed_gems);;
+    push)
+      type -t _filedir >/dev/null && _filedir "*.gem" "$cur"
+      return;;
     esac
   fi
   COMPREPLY=($(compgen -W "$choices" -- "$cur"))
