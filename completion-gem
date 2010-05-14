@@ -17,6 +17,9 @@ __gem() {
   local gem_command
   __gem_get_command
 
+  # can't do anything with non-commands
+  [[ $gem_command == - ]] && return
+
   if [[ $prev == --config-file ]]; then
     # leave COMPREPLY blank, let the default handle it
     return
@@ -31,9 +34,6 @@ __gem() {
     case $gem_command in
     "")
       choices="-h --help -v --version";;
-    -)
-      # no options for --help, --version
-      ;;
     *)
       choices=$(__gem_command_options "$gem_command")
     esac
@@ -61,7 +61,7 @@ __gem_get_command() {
     local arg=${COMP_WORDS[$i]}
 
     case $arg in
-    -h | --help | -v | --version)
+    -h | --help | -v | --version | --)
       # these options are command-killers
       gem_command=-
       return;;
@@ -70,6 +70,14 @@ __gem_get_command() {
       ((++i));;
     [^-]*)
       gem_command=$arg
+
+      # keep scanning; if a "--" is found, treat the command as finished
+      for ((++i; i < $COMP_CWORD; ++i)); do
+        if [[ ${COMP_WORDS[$i]} == -- ]]; then
+          gem_command=-
+          return
+        fi
+      done
       return;;
     esac
   done
