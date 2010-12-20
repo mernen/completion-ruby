@@ -10,8 +10,10 @@
 
 __rake() {
   local rake_cmd="$1"
-  # $2 returns just the part after the last colon
-  local cur="$(echo "${COMP_WORDS[@]}" | sed 's/ : /:/g; s/ :$/:/; s/^.* //')"
+  # For the current word, $2 returns just the part after the last colon.
+  # ${COMP_WORDS[$COMP_CWORD]} used to work fine, but for some reason
+  # bash 4.1.5 on Ubuntu 10.10 will treat the colons as separate words.
+  local cur="$(<<<"${COMP_LINE:0:$COMP_POINT}" sed 's/^.* //')"
   local prev=$3
   COMPREPLY=()
 
