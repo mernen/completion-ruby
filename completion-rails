@@ -8,6 +8,101 @@
 # To use, source this file on bash:
 #   . completion-rails
 
+__rails() {
+  if [[ -z $__RAILS_VERSION ]]; then
+    local ver=$(rails --version 2>/dev/null)
+    if [[ $ver == "Rails 2."* ]]; then
+      __RAILS_VERSION=__rails2
+    else
+      __RAILS_VERSION=__rails3
+    fi
+  fi
+  $__RAILS_VERSION "$@"
+}
+
+# returns the first non-option argument
+__rails_get_command() {
+  local i
+  for ((i=1; i < $COMP_CWORD; ++i)); do
+    local arg=${COMP_WORDS[$i]}
+
+    case $arg in
+    -b | --builder | -r | --ruby | --root | -m | --template |\
+    -s | --source  | -e | --environment)
+      # ignore next argument
+      ;;
+    [^-]*)
+      echo $arg
+      return;;
+    esac
+  done
+}
+
+
+__rails3() {
+  local cur=$2
+  local prev=$3
+  local cmd=$(__rails_get_command)
+  COMPREPLY=()
+
+  case $prev in
+  -b | --builder | -r | --ruby | --root | -m | --template | -s | --source)
+    # leave it to complete the path
+    return;;
+  -e | --environment)
+    __rails3_complete_environments "$cur"
+    return;;
+  --mode)
+    if [[ $cmd == dbconsole || $cmd == db ]]; then
+      local options="html list line column"
+      COMPREPLY=($(compgen -W "$options" -- "$cur"))
+      return
+    fi
+    ;;
+  esac
+
+  local options
+  if [[ $cur == -* ]]; then
+    if [[ -z $cmd ]]; then
+      options="-h --help -v --version"
+    else
+      options=$(rails "$cmd" --help |
+                ruby -ne 'puts $_.scan(/(-\w)|(--\w[-\w]*)/)')
+    fi
+  else
+    case $cmd in
+    "")
+      options=$(rails |
+                ruby -ne 'puts $1 if ~/^  rails (\S+)/;
+                          puts $1 if ~/^ (\S+)/;
+                          puts $1 if ~/alias: "(\S+)"/')
+      ;;
+    server | s)
+      # load list dynamically?
+      options="mongrel thin"
+      ;;
+    console | c | dbconsole | db)
+      __rails3_complete_environments "$cur"
+      return;;
+    generate | g | destroy)
+      options=$(rails "$cmd" --help |
+                ruby -ne 'puts $1 if ~/^  (\w\S*)/')
+      ;;
+    plugin)
+      options="install remove"
+    esac
+  fi
+  COMPREPLY=($(compgen -W "$options" -- "$cur"))
+}
+
+__rails3_complete_environments() {
+  # hardcoded list of environments... for now?
+  local environments="development test production"
+  COMPREPLY=($(compgen -W "$environments" -- "$1"))
+}
+
+
+
 __rails2() {
   local cur=$2
   local prev=$3
@@ -77,19 +172,6 @@ __rails2_script_generate() {
   fi
 }
 
-# returns the first non-option argument
-__rails_get_command() {
-  local i
-  for ((i=1; i < $COMP_CWORD; ++i)); do
-    local arg=${COMP_WORDS[$i]}
-
-    if [[ $arg != -* ]]; then
-      echo $arg
-      return
-    fi
-  done
-}
-
 __rails2_complete_environments() {
   # hardcoded list of environments... for now?
   local environments="development test production"
@@ -103,7 +185,11 @@ __rails2_complete_generators() {
   COMPREPLY=($(compgen -W "$generators" -- "$1"))
 }
 
-complete -F __rails2 -o default rails
+
+# clear the version cache, targeted version might change on reload
+unset __RAILS_VERSION
+
+complete -F __rails -o default rails
 complete -F __rails2_script_server -o default script/server ./script/server
 complete -F __rails2_script_console -o default script/console ./script/console
 complete -F __rails2_script_generate -o default script/generate ./script/generate
