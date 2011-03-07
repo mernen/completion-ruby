@@ -1,6 +1,6 @@
 # bash completion for various Ruby-related commands.
 #
-# Copyright (c) 2008 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2008-2011 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
@@ -8,9 +8,6 @@
 # They all must be on the same directory for it to work.
 # To use, source this file on bash:
 #   . completion-ruby-all
-
-# extra measure to avoid infinite recursion
-type _completion_ruby_init &>/dev/null && return 1
 
 _CR_PATH=$(dirname "$BASH_ARGV")
 # _cr_anycmd <command> [command...]
