@@ -38,6 +38,18 @@ __rails_get_command() {
   done
 }
 
+__rails_complete_environments() {
+  local environments=(config/environments/*.rb)
+  if [[ -f $environments ]]; then
+    environments=("${environments[@]##*/}")
+    environments=("${environments[@]%.rb}")
+  else
+    environments=(development test production)
+  fi
+  COMPREPLY=($(compgen -W "${environments[*]}" -- "$1"))
+}
+
+
 
 __rails3() {
   local cur=$2
@@ -50,7 +62,7 @@ __rails3() {
     # leave it to complete the path
     return;;
   -e | --environment)
-    __rails3_complete_environments "$cur"
+    __rails_complete_environments "$cur"
     return;;
   --mode)
     if [[ $cmd == dbconsole || $cmd == db ]]; then
@@ -82,7 +94,7 @@ __rails3() {
       options="mongrel thin"
       ;;
     console | c | dbconsole | db)
-      __rails3_complete_environments "$cur"
+      __rails_complete_environments "$cur"
       return;;
     generate | g | destroy)
       options=$(rails "$cmd" --help |
@@ -93,12 +105,6 @@ __rails3() {
     esac
   fi
   COMPREPLY=($(compgen -W "$options" -- "$cur"))
-}
-
-__rails3_complete_environments() {
-  # hardcoded list of environments... for now?
-  local environments="development test production"
-  COMPREPLY=($(compgen -W "$environments" -- "$1"))
 }
 
 
@@ -133,7 +139,7 @@ __rails2_script_server() {
 
   case $prev in
   -e | --environment)
-    __rails2_complete_environments "$cur"
+    __rails_complete_environments "$cur"
     return;;
   *)
     if [[ $cur == -* ]]; then
@@ -154,7 +160,7 @@ __rails2_script_console() {
   elif [[ $prev == --irb ]]; then
     COMPREPLY=($(compgen -A command -- "$cur"))
   else
-    __rails2_complete_environments "$cur"
+    __rails_complete_environments "$cur"
   fi
 }
 
@@ -170,12 +176,6 @@ __rails2_script_generate() {
   elif [[ $(__rails_get_command) == "" ]]; then
     __rails2_complete_generators "$cur"
   fi
-}
-
-__rails2_complete_environments() {
-  # hardcoded list of environments... for now?
-  local environments="development test production"
-  COMPREPLY=($(compgen -W "$environments" -- "$1"))
 }
 
 __rails2_complete_generators() {
