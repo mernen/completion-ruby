@@ -40,8 +40,14 @@ __rails_get_command() {
         return
       else
         rails_command=$arg
-        # only `generate` has a recognized subcommand at the moment
-        [[ $arg != generate ]] && return
+        case $arg in
+          generate | g | destroy | plugin)
+            # continue processing, looking for a subcommand
+            ;;
+          *)
+            # end processing
+            return;;
+        esac
       fi
       ;;
     esac
