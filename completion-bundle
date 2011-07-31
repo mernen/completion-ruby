@@ -16,13 +16,13 @@ __bundle() {
   COMPREPLY=()
 
   local options
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
       options="--no-color --verbose"
       if [[ -z $bundle_command ]]; then
           options="$options --version --help"
       fi
   else
-      if [[ -z $bundle_command || $bundle_command == help ]]; then
+      if [[ -z $bundle_command || $bundle_command = help ]]; then
           options="help install update package exec config check list show
                    console open viz init gem"
       fi

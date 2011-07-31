@@ -48,7 +48,7 @@ __jruby() {
     esac
   done
 
-  if [[ $switches_accepted && $cur == -* ]]; then
+  if [[ $switches_accepted && $cur = -* ]]; then
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
   elif [[ $script_in_path && ! $script_given ]]; then
     local jruby_dir=$(dirname "$(which "$cmd")" 2>/dev/null)
@@ -60,7 +60,7 @@ __jruby() {
   fi
 
   # include `ruby` completion results, if available
-  if [[ $(type -t __ruby) == function ]]; then
+  if [[ $(type -t __ruby) = function ]]; then
     local cr=("${COMPREPLY[@]}")
     __ruby "$@"
     COMPREPLY+=("${cr[@]}")

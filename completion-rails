@@ -11,7 +11,7 @@
 __rails() {
   if [[ -z $__RAILS_VERSION ]]; then
     local ver=$(rails --version 2>/dev/null)
-    if [[ $ver == "Rails 2."* ]]; then
+    if [[ $ver = "Rails 2."* ]]; then
       __RAILS_VERSION=__rails2
     else
       __RAILS_VERSION=__rails3
@@ -66,7 +66,7 @@ __rails3() {
     __rails_complete_environments "$cur"
     return;;
   --mode)
-    if [[ $cmd == dbconsole || $cmd == db ]]; then
+    if [[ $cmd = dbconsole || $cmd = db ]]; then
       local options="html list line column"
       COMPREPLY=($(compgen -W "$options" -- "$cur"))
       return
@@ -75,7 +75,7 @@ __rails3() {
   esac
 
   local options
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
     if [[ -z $cmd ]]; then
       options="-h --help -v --version"
     else
@@ -125,7 +125,7 @@ __rails2() {
     return;;
   esac
 
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
     local options="
       -r --ruby -d --database -f --freeze -v --version -h --help -p --pretend
       --force -s --skip -q --quiet -t --backtrace -c --svn -g --git"
@@ -143,7 +143,7 @@ __rails2_script_server() {
     __rails_complete_environments "$cur"
     return;;
   *)
-    if [[ $cur == -* ]]; then
+    if [[ $cur = -* ]]; then
       local options="
         -p --port -b --binding -d --daemon -u --debugger -e --environment"
       COMPREPLY=($(compgen -W "$options" -- "$cur"))
@@ -155,10 +155,10 @@ __rails2_script_console() {
   local cur=$2
   local prev=$3
   COMPREPLY=()
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
     local options="-s --sandbox --irb --debugger"
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  elif [[ $prev == --irb ]]; then
+  elif [[ $prev = --irb ]]; then
     COMPREPLY=($(compgen -A command -- "$cur"))
   else
     __rails_complete_environments "$cur"
@@ -169,12 +169,12 @@ __rails2_script_generate() {
   local cur=$2
   local prev=$3
   COMPREPLY=()
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
     local options="
       -v --version -h --help -p --pretend -f --force -s --skip
       -q --quiet -t --backtrace -c --svn -g --git"
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  elif [[ $(__rails_get_command) == "" ]]; then
+  elif [[ $(__rails_get_command) = "" ]]; then
     __rails2_complete_generators "$cur"
   fi
 }

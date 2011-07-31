@@ -18,19 +18,19 @@ __gem() {
   __gem_get_command
 
   # can't do anything with non-commands
-  [[ $gem_command == - ]] && return
+  [[ $gem_command = - ]] && return
 
-  if [[ $prev == --config-file ]]; then
+  if [[ $prev = --config-file ]]; then
     # leave COMPREPLY blank, let the default handle it
     return
-  elif [[ $prev == --*dir || ${COMP_WORDS[$COMP_CWORD]} == --*dir=* ]]; then
+  elif [[ $prev = --*dir || ${COMP_WORDS[$COMP_CWORD]} = --*dir=* ]]; then
     # assume any option ending in 'dir' takes a directory name
     type -t _filedir >/dev/null && _filedir -d "$cur"
     return
   fi
 
   local choices
-  if [[ $cur == -* ]]; then
+  if [[ $cur = -* ]]; then
     case $gem_command in
     "")
       choices="-h --help -v --version";;
@@ -73,7 +73,7 @@ __gem_get_command() {
 
       # keep scanning; if a "--" is found, treat the command as finished
       for ((++i; i < $COMP_CWORD; ++i)); do
-        if [[ ${COMP_WORDS[$i]} == -- ]]; then
+        if [[ ${COMP_WORDS[$i]} = -- ]]; then
           gem_command=-
           return
         fi

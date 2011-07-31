@@ -29,14 +29,14 @@ __rake() {
     fi
     return;;
   *)
-    if [[ $cur == -* ]]; then
+    if [[ $cur = -* ]]; then
       local options="
         -C --classic-namespace -D --describe -n --dry-run -h --help
         -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
         -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
         -v --verbose -V --version"
       COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    elif [[ $cur == *'['* ]]; then
+    elif [[ $cur = *'['* ]]; then
       # parameter completion (using default compgen)
       # $cur: example[param1,param2
       # $args: param1,param2
@@ -78,7 +78,7 @@ __rake() {
 # namespaced tasks. This function removes whatever the user already typed
 # until the last colon.
 __rake_remove_namespaces() {
-  if [[ $cur == *:* ]]; then
+  if [[ $cur = *:* ]]; then
     local prefix=${cur%:*}:
     COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
   fi
@@ -125,7 +125,7 @@ __rake_get_rakefile() {
       fi
     done
     cd ..
-    [[ $(pwd) == / ]] && break
+    [[ $(pwd) = / ]] && break
   done
 
   popd >/dev/null
@@ -152,7 +152,7 @@ __rake_tasks() {
 
   local tasks
   if [[ $cachefile -nt $rakefile &&
-        $(head -n 1 -- "$cachefile") == $rakefile ]]; then
+        $(head -n 1 -- "$cachefile") = $rakefile ]]; then
     tail -n +2 -- "$cachefile"
   else
     [[ -d $rakedir ]] && cd "$rakedir"
