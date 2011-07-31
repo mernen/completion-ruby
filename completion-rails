@@ -30,6 +30,7 @@ __rails_get_command() {
     -b | --builder | -r | --ruby | --root | -m | --template |\
     -s | --source  | -e | --environment)
       # ignore next argument
+      ((++i))
       ;;
     [^-]*)
       echo $arg
