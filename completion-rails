@@ -20,8 +20,10 @@ __rails() {
   $__RAILS_VERSION "$@"
 }
 
-# returns the first non-option argument
+# sets $rails_command and $rails_subcommand
 __rails_get_command() {
+  rails_command=
+  rails_subcommand=
   local i
   for ((i=1; i < $COMP_CWORD; ++i)); do
     local arg=${COMP_WORDS[$i]}
@@ -33,8 +35,15 @@ __rails_get_command() {
       ((++i))
       ;;
     [^-]*)
-      echo $arg
-      return;;
+      if [[ -n $rails_command ]]; then
+        rails_subcommand=$arg
+        return
+      else
+        rails_command=$arg
+        # only `generate` has a recognized subcommand at the moment
+        [[ $arg != generate ]] && return
+      fi
+      ;;
     esac
   done
 }
@@ -55,7 +64,7 @@ __rails_complete_environments() {
 __rails3() {
   local cur=$2
   local prev=$3
-  local cmd=$(__rails_get_command)
+  __rails_get_command
   COMPREPLY=()
 
   case $prev in
@@ -66,7 +75,7 @@ __rails3() {
     __rails_complete_environments "$cur"
     return;;
   --mode)
-    if [[ $cmd = dbconsole || $cmd = db ]]; then
+    if [[ $rails_command = dbconsole || $rails_command = db ]]; then
       local options="html list line column"
       COMPREPLY=($(compgen -W "$options" -- "$cur"))
       return
@@ -76,14 +85,15 @@ __rails3() {
 
   local options
   if [[ $cur = -* ]]; then
-    if [[ -z $cmd ]]; then
+    if [[ -z $rails_command ]]; then
       options="-h --help -v --version"
     else
-      options=$(rails "$cmd" --help |
+      local param
+      options=$(rails "$rails_command" $rails_subcommand --help |
                 ruby -ne 'puts $_.scan(/(-\w)|(--\w[-\w]*)/)')
     fi
   else
-    case $cmd in
+    case $rails_command in
     "")
       options=$(rails |
                 ruby -ne 'puts $1 if ~/^  rails (\S+)/;
@@ -98,7 +108,7 @@ __rails3() {
       __rails_complete_environments "$cur"
       return;;
     generate | g | destroy)
-      options=$(rails "$cmd" --help |
+      options=$(rails "$rails_command" --help |
                 ruby -ne 'puts $1 if ~/^  (\w\S*)/')
       ;;
     plugin)
@@ -174,7 +184,7 @@ __rails2_script_generate() {
       -v --version -h --help -p --pretend -f --force -s --skip
       -q --quiet -t --backtrace -c --svn -g --git"
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  elif [[ $(__rails_get_command) = "" ]]; then
+  elif __rails_get_command && [[ $rails_command = "" ]]; then
     __rails2_complete_generators "$cur"
   fi
 }
