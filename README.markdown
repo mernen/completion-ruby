@@ -17,7 +17,11 @@ source them individually.
 
 These scripts offer improved directory completion when `bash-completion` is
 available. It should be part of pretty much any modern Linux distribution,
-and you can install it on OS X using [MacPorts][]:
+and you can install it on OS X using [Homebrew][]:
+
+    brew install bash-completion
+
+Or [MacPorts][]:
 
     sudo port install bash-completion
 
@@ -59,6 +63,7 @@ For up-to-date information, visit [this project's permalink][permalink].
 [Daniel Luz]:  http://mernen.com/
 [MIT license]: http://www.opensource.org/licenses/mit-license.php
 [Git]:  http://git-scm.com/               (Git — Fast Version Control System)
+[Homebrew]: http://mxcl.github.com/homebrew/ (Homebrew – The missing package manager for OS X)
 [MacPorts]: http://www.macports.org/      (The MacPorts Project)
 [repo]: https://github.com/mernen/completion-ruby
 [permalink]: http://mernen.com/projects/completion-ruby
