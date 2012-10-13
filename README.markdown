@@ -45,7 +45,7 @@ overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright © 2008-2010 [Daniel Luz][].
+Copyright © 2008-2012 [Daniel Luz][].
 
 **completion-ruby** is distributed under the [MIT license][].
 
@@ -60,5 +60,5 @@ For up-to-date information, visit [this project's permalink][permalink].
 [MIT license]: http://www.opensource.org/licenses/mit-license.php
 [Git]:  http://git-scm.com/               (Git — Fast Version Control System)
 [MacPorts]: http://www.macports.org/      (The MacPorts Project)
-[repo]: http://github.com/mernen/completion-ruby/tree
+[repo]: https://github.com/mernen/completion-ruby
 [permalink]: http://mernen.com/projects/completion-ruby
