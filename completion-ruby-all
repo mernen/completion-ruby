@@ -1,6 +1,6 @@
 # bash completion for various Ruby-related commands.
 #
-# Copyright (c) 2008-2011 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2008-2012 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
@@ -9,23 +9,46 @@
 # To use, source this file on bash:
 #   . completion-ruby-all
 
-_CR_PATH=$(dirname "$BASH_ARGV")
-# _cr_anycmd <command> [command...]
-# Returns success if any of the given commands is found, nonzero if
-# none of them exists.
-_cr_anycmd() {
-  for cmd in "$@"; do
-    type -- "$cmd" &>/dev/null && return
-  done
-  return 1
-}
-# _cr_load <script> [additional commands]
-# Sources completion-<script>, if the file exists and either <script> or
-# any of the additional parameters names an existing command.
-_cr_load() {
-  local script=$_CR_PATH/completion-$1
-  [[ -f $script ]] && _cr_anycmd "$@" && . "$script"
-}
+# if running bash 4.1+, lazily load scripts
+if [[ (${BASH_VERSINFO[0]} -eq 4 && ${BASH_VERSINFO[1]} -ge 1) ||
+      ${BASH_VERSINFO[0]} -gt 4 ]]; then
+    declare -A _COMPLETION_RUBY_ALIASES
+
+    _completion_ruby_loader() {
+        local cmd=${1##*/}
+        cmd=${_COMPLETION_RUBY_ALIASES[$cmd]:-$cmd}
+        local path=${BASH_SOURCE%/*}
+        . "$path/completion-$cmd" &>/dev/null && return 124
+        [[ $(type -t _minimal) = function ]] && complete -F _minimal "$1" && return 124
+    }
+
+    _cr_load() {
+        local aliases=("$@")
+        unset aliases[0]
+        for alias in "${aliases[@]}"; do
+            _COMPLETION_RUBY_ALIASES[$alias]=$1
+        done
+        complete -F _completion_ruby_loader "$@"
+    }
+else
+    _CR_PATH=$(dirname "$BASH_ARGV")
+    # _cr_anycmd <command> [command...]
+    # Returns success if any of the given commands is found, nonzero if
+    # none of them exists.
+    _cr_anycmd() {
+        for cmd in "$@"; do
+            type -- "$cmd" &>/dev/null && return
+        done
+        return 1
+    }
+    # _cr_load <script> [additional commands]
+    # Sources completion-<script>, if the file exists and either <script> or
+    # any of the additional parameters names an existing command.
+    _cr_load() {
+        local script=$_CR_PATH/completion-$1
+        [[ -f $script ]] && _cr_anycmd "$@" && . "$script"
+    }
+fi
 
 _cr_load gem gem1.8 gem1.9 jgem
 _cr_load jruby
@@ -37,4 +60,4 @@ _cr_load ruby ruby1.8 ruby1.9
 unset -f _cr_load _cr_anycmd
 unset -v _CR_PATH
 
-# vim: ai ft=sh sw=2 sts=2 et
+# vim: ai ft=sh sw=4 sts=4 et
