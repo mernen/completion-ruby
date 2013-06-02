@@ -143,7 +143,7 @@ __rake_tasks() {
   else
     [[ -d $rakedir ]] && cd "$rakedir"
     local rake_cmd=${rake_cmd:-rake}
-    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent -P 2>/dev/null | grep '^rake ' | sort -u | cut -b6-)
+    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null | grep '^rake ' | sort -u | cut -b6-)
     if [[ $tasks ]]; then
       # attempt to ensure $cachedir exists and is a directory
       # before writing to $cachefile
