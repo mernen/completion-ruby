@@ -70,9 +70,8 @@ __rake() {
 
   # append a space to all options...
   COMPREPLY=("${COMPREPLY[@]/%/ }")
-
   # ...and remove [parameters] from tasks
-  COMPREPLY=("${COMPREPLY[@]/[*/}")
+  COMPREPLY=("${COMPREPLY[@]/\[*/[}")
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
@@ -148,7 +147,12 @@ __rake_tasks() {
   else
     [[ -d $rakedir ]] && cd "$rakedir"
     local rake_cmd=${rake_cmd:-rake}
-    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null | grep '^rake ' | sort -u | cut -b6-)
+    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null |
+            sed -ne '/^rake / {
+              s/^rake \(.*\)/\1/p
+              # for commands with parameters, also offer parameterless version
+              s/\[.*//p
+            }')
     if [[ $tasks ]]; then
       # attempt to ensure $cachedir exists and is a directory
       # before writing to $cachefile
