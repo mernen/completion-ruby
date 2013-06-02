@@ -51,6 +51,11 @@ __rake() {
       # and prepend the prefix to all completion options
       COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
 
+      # if the user already typed the final "]", consider it a done business
+      if [[ ${#COMPREPLY} -eq 0 && $cur = *\] ]]; then
+        COMPREPLY=("$cur ")
+      fi
+
       __ltrim_colon_completions "$cur"
       # don't perform usual post-processing
       return
