@@ -10,11 +10,7 @@
 
 __rake() {
   local rake_cmd="$1"
-  # For the current word, $2 returns just the part after the last colon.
-  # ${COMP_WORDS[$COMP_CWORD]} used to work fine, but for some reason
-  # bash 4.1.5 on Ubuntu 10.10 will treat the colons as separate words.
-  local cur="$(<<<"${COMP_LINE:0:$COMP_POINT}" sed 's/^.* //')"
-  local prev=$3
+  _get_comp_words_by_ref -n : cur prev
   COMPREPLY=()
 
   case $prev in
@@ -55,7 +51,7 @@ __rake() {
       # and prepend the prefix to all completion options
       COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
 
-      __rake_remove_namespaces
+      __ltrim_colon_completions "$cur"
       # don't perform usual post-processing
       return
     else
@@ -65,23 +61,13 @@ __rake() {
     fi
   esac
 
-  __rake_remove_namespaces
+  __ltrim_colon_completions "$cur"
 
   # append a space to all options...
   COMPREPLY=("${COMPREPLY[@]/%/ }")
 
   # ...and remove [parameters] from tasks
   COMPREPLY=("${COMPREPLY[@]/[*/}")
-}
-
-# bash treats ":" as a path separator, borking our completion on
-# namespaced tasks. This function removes whatever the user already typed
-# until the last colon.
-__rake_remove_namespaces() {
-  if [[ $cur = *:* ]]; then
-    local prefix=${cur%:*}:
-    COMPREPLY=("${COMPREPLY[@]#"$prefix"}")
-  fi
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
