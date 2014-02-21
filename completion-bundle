@@ -26,13 +26,18 @@ __bundle() {
           options="help install update package exec config check list show
                    console open viz init gem"
        elif [[ -n $bundle_command && $bundle_command = exec ]]; then
-           local IFS=$'\n'
-           local xspec="!$BUNDLE_PATH/ruby/*/bin/*"
-           _expand || return 0
-
-           _compopt_o_filenames
-           COMPREPLY=( $( compgen -f -X "$xspec" -- "$current" ) )
-           return 0
+           local bundle_path
+           local bundle_config_path=$(bundle config path)
+           local config_path=$(echo $bundle_config_path | egrep -e '\(([^)]*)\)' -o | tr -d '()')
+           local relative_bundle_path=$(echo $bundle_config_path | egrep -o -e '"[^"]*"' | tr -d '"')
+           # TODO: handle empty config path properly
+           if [[ -z config_path ]]; then
+               bundle_path="$GEM_HOME"
+           else
+               bundle_path="${config_path%/.bundle/config}/$relative_bundle_path"
+           fi
+           local bin_path="${bundle_path}/ruby/*/bin/"
+           options=$(ls -1 $bin_path)
        fi
   fi
   COMPREPLY=($(compgen -W "$options" -- "$cur"))
