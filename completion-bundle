@@ -25,7 +25,15 @@ __bundle() {
       if [[ -z $bundle_command || $bundle_command = help ]]; then
           options="help install update package exec config check list show
                    console open viz init gem"
-      fi
+       elif [[ -n $bundle_command && $bundle_command = exec ]]; then
+           local IFS=$'\n'
+           local xspec="!$BUNDLE_PATH/ruby/*/bin/*"
+           _expand || return 0
+
+           _compopt_o_filenames
+           COMPREPLY=( $( compgen -f -X "$xspec" -- "$current" ) )
+           return 0
+       fi
   fi
   COMPREPLY=($(compgen -W "$options" -- "$cur"))
 }
