@@ -9,42 +9,42 @@
 #   . completion-bundle
 
 __bundle() {
-  local cur=$2
-  local prev=$3
-  local bundle_command
-  __bundle_get_command
-  COMPREPLY=()
+    local cur=$2
+    local prev=$3
+    local bundle_command
+    __bundle_get_command
+    COMPREPLY=()
 
-  local options
-  if [[ $cur = -* ]]; then
-      options="--no-color --verbose"
-      if [[ -z $bundle_command ]]; then
-          options="$options --version --help"
-      fi
-  else
-      if [[ -z $bundle_command || $bundle_command = help ]]; then
-          options="help install update package exec config check list show
-                   console open viz init gem"
-       elif [[ -n $bundle_command && $bundle_command = exec ]]; then
-           local bundle_path
-           local bundle_config_path=$(bundle config path)
-           local config_path=$(echo $bundle_config_path | egrep -e '\(([^)]*)\)' -o | tr -d '()')
-           local relative_bundle_path=$(echo $bundle_config_path | egrep -o -e '"[^"]*"' | tr -d '"')
-           # TODO: handle empty config path properly
-           if [[ -z config_path ]]; then
-               bundle_path="$GEM_HOME"
-           else
-               bundle_path="${config_path%/.bundle/config}/$relative_bundle_path"
-           fi
-           local bin_path="${bundle_path}/ruby/*/bin/"
-           if [[ $(test -d ${bin_path}) -eq 0 ]]; then
-               options=$(ls -1 $bin_path)
-           else
-               return 0
-           fi
-       fi
-  fi
-  COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    local options
+    if [[ $cur = -* ]]; then
+        options="--no-color --verbose"
+        if [[ -z $bundle_command ]]; then
+            options="$options --version --help"
+        fi
+    else
+        if [[ -z $bundle_command || $bundle_command = help ]]; then
+            options="help install update package exec config check list show
+            console open viz init gem"
+        elif [[ -n $bundle_command && $bundle_command = exec ]]; then
+            local bundle_path
+            local bundle_config_path=$(bundle config path)
+            local config_path=$(echo $bundle_config_path | egrep -e '\(([^)]*)\)' -o | tr -d '()')
+            local relative_bundle_path=$(echo $bundle_config_path | egrep -o -e '"[^"]*"' | tr -d '"')
+            # TODO: handle empty config path properly
+            if [[ -z config_path ]]; then
+                bundle_path="$GEM_HOME"
+            else
+                bundle_path="${config_path%/.bundle/config}/$relative_bundle_path"
+            fi
+            local bin_path="${bundle_path}/ruby/*/bin/"
+            if [[ $(test -d ${bin_path}) -eq 0 ]]; then
+                options=$(ls -1 $bin_path)
+            else
+                return 0
+            fi
+        fi
+    fi
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
 }
 
 __bundle_get_command() {
@@ -53,16 +53,16 @@ __bundle_get_command() {
         local arg=${COMP_WORDS[$i]}
 
         case $arg in
-        [^-]*)
-            bundle_command=$arg
-            return;;
-        --version)
-            # command-killer
-            bundle_command=-
-            return;;
-        --help)
-            bundle_command=help
-            return;;
+            [^-]*)
+                bundle_command=$arg
+                return;;
+            --version)
+                # command-killer
+                bundle_command=-
+                return;;
+            --help)
+                bundle_command=help
+                return;;
         esac
     done
 }
