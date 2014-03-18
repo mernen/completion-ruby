@@ -37,7 +37,11 @@ __bundle() {
                bundle_path="${config_path%/.bundle/config}/$relative_bundle_path"
            fi
            local bin_path="${bundle_path}/ruby/*/bin/"
-           options=$(ls -1 $bin_path)
+           if [[ $(test -d ${bin_path}) -eq 0 ]]; then
+               options=$(ls -1 $bin_path)
+           else
+               return 0
+           fi
        fi
   fi
   COMPREPLY=($(compgen -W "$options" -- "$cur"))
