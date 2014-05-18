@@ -95,13 +95,13 @@ __rails3() {
       options="-h --help -v --version"
     else
       local param
-      options=$(rails "$rails_command" $rails_subcommand --help |
+      options=$(rails "$rails_command" $rails_subcommand --help 2>/dev/null |
                 ruby -ne 'puts $_.scan(/(-\w)|(--\w[-\w]*)/)')
     fi
   else
     case $rails_command in
     "")
-      options=$(rails |
+      options=$(rails 2>/dev/null |
                 ruby -ne 'puts $1 if ~/^  rails (\S+)/;
                           puts $1 if ~/^ (\S+)/;
                           puts $1 if ~/alias: "(\S+)"/')
@@ -114,7 +114,7 @@ __rails3() {
       __rails_complete_environments "$cur"
       return;;
     generate | g | destroy)
-      options=$(rails "$rails_command" --help |
+      options=$(rails "$rails_command" --help 2>/dev/null |
                 ruby -ne 'puts $1 if ~/^  (\w\S*)/')
       ;;
     plugin)
