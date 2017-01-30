@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `rake` command.
 #
-# Copyright (c) 2008-2013 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2008-2017 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
@@ -9,69 +9,69 @@
 #   . completion-rake
 
 __rake() {
-  local rake_cmd="$1"
-  _get_comp_words_by_ref -n : cur prev
-  COMPREPLY=()
+    local rake_cmd="$1"
+    _get_comp_words_by_ref -n : cur prev
+    COMPREPLY=()
 
-  case $prev in
-  -f | --rakefile | -r | --require)
-    # leave COMPREPLY blank, let the default handle it
-    return;;
-  -I | --libdir | -R | --rakelibdir)
-    if type -t _filedir >/dev/null; then
-      _filedir -d
-      # suffix all entries with a slash
-      COMPREPLY=("${COMPREPLY[@]/%//}")
-    fi
-    return;;
-  *)
-    if [[ $cur = -* ]]; then
-      local options="
-        -C --classic-namespace -D --describe -n --dry-run -h --help
-        -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
-        -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
-        -v --verbose -V --version"
-      COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    elif [[ $cur = *'['* ]]; then
-      # parameter completion (using default compgen)
-      # $cur: example[param1,param2
-      # $args: param1,param2
-      local args=${cur#*[}
-      # $last_arg: param2
-      local last_arg=${args##*,}
-      # $prefix: example[param1,
-      local prefix=${cur%"$last_arg"}
+    case $prev in
+    -f | --rakefile | -r | --require)
+        # Leave COMPREPLY blank, let the default handle it
+        return;;
+    -I | --libdir | -R | --rakelibdir)
+        if type -t _filedir >/dev/null; then
+            _filedir -d
+            # Suffix all entries with a slash
+            COMPREPLY=("${COMPREPLY[@]/%//}")
+        fi
+        return;;
+    *)
+        if [[ $cur = -* ]]; then
+            local options="
+                -C --classic-namespace -D --describe -n --dry-run -h --help
+                -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
+                -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
+                -v --verbose -V --version"
+            COMPREPLY=($(compgen -W "$options" -- "$cur"))
+        elif [[ $cur = *'['* ]]; then
+            # Parameter completion (using default compgen)
+            # $cur: example[param1,param2
+            # $args: param1,param2
+            local args=${cur#*[}
+            # $last_arg: param2
+            local last_arg=${args##*,}
+            # $prefix: example[param1,
+            local prefix=${cur%"$last_arg"}
 
-      # ugh, ugly hack here, but I'm out of ideas
-      local old_ifs=$IFS IFS=$'\n'
-      COMPREPLY=($(compgen -o bashdefault -o default -- "$last_arg"))
-      local IFS=$old_ifs
-      # escape space characters...
-      COMPREPLY=("${COMPREPLY[@]// /\ }")
-      # and prepend the prefix to all completion options
-      COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
+            # Ugh, ugly hack here, but I'm out of ideas
+            local old_ifs=$IFS IFS=$'\n'
+            COMPREPLY=($(compgen -o bashdefault -o default -- "$last_arg"))
+            local IFS=$old_ifs
+            # Escape space characters...
+            COMPREPLY=("${COMPREPLY[@]// /\ }")
+            # ...and prepend the prefix to all completion options
+            COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
 
-      # if the user already typed the final "]", consider it a done business
-      if [[ ${#COMPREPLY} -eq 0 && $cur = *\] ]]; then
-        COMPREPLY=("$cur ")
-      fi
+            # If the user already typed the final "]", consider it a done business
+            if [[ ${#COMPREPLY} -eq 0 && $cur = *\] ]]; then
+                COMPREPLY=("$cur ")
+            fi
 
-      __ltrim_colon_completions "$cur"
-      # don't perform usual post-processing
-      return
-    else
-      local rakefile rakedir
-      __rake_get_rakefile || return
-      COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
-    fi
-  esac
+            __ltrim_colon_completions "$cur"
+            # Don't perform usual post-processing
+            return
+        else
+            local rakefile rakedir
+            __rake_get_rakefile || return
+            COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
+        fi
+    esac
 
-  __ltrim_colon_completions "$cur"
+    __ltrim_colon_completions "$cur"
 
-  # append a space to all options...
-  COMPREPLY=("${COMPREPLY[@]/%/ }")
-  # ...and remove [parameters] from tasks
-  COMPREPLY=("${COMPREPLY[@]/\[*/[}")
+    # Append a space to all options...
+    COMPREPLY=("${COMPREPLY[@]/%/ }")
+    # ...and remove [parameters] from tasks
+    COMPREPLY=("${COMPREPLY[@]/\[*/[}")
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
@@ -84,42 +84,42 @@ __rake() {
 #
 # Note that `$rakefile` is also NOT guaranteed to be absolute!
 __rake_get_rakefile() {
-  # look for --rakefile or -f
-  # $rakedir is not defined in this case, regardless of where $rakefile lives
-  local i
-  for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
-    local arg=${COMP_WORDS[$i]}
+    # Look for --rakefile or -f
+    # $rakedir is not defined in this case, regardless of where $rakefile lives
+    local i
+    for ((i=0; i <= $COMP_CWORD - 1; ++i)); do
+        local arg=${COMP_WORDS[$i]}
 
-    case $arg in
-    --rakefile | -f)
-      rakefile=${COMP_WORDS[$(($i + 1))]}
-      return;;
-    --rakefile=* | -f=*)
-      rakefile=${arg#*=}
-      return;;
-    esac
-  done
-
-  # look for rakefiles in the directory hierarchy
-  # note that the command should run on the context of the directory where
-  # the rakefile is found, so $rakedir has to be set
-  local fn
-  pushd . &>/dev/null
-  while true; do
-    for fn in rakefile Rakefile; do
-      if [[ -f $fn ]]; then
-        rakedir=$(pwd)
-        rakefile=$rakedir/$fn
-        popd &>/dev/null
-        return
-      fi
+        case $arg in
+        --rakefile | -f)
+            rakefile=${COMP_WORDS[$(($i + 1))]}
+            return;;
+        --rakefile=* | -f=*)
+            rakefile=${arg#*=}
+            return;;
+        esac
     done
-    cd ..
-    [[ $(pwd) = / ]] && break
-  done
 
-  popd >/dev/null
-  return 1
+    # Look for rakefiles in the directory hierarchy
+    # Note that the command should run on the context of the directory where
+    # the rakefile is found, so $rakedir has to be set
+    local fn
+    pushd . &>/dev/null
+    while true; do
+        for fn in rakefile Rakefile; do
+            if [[ -f $fn ]]; then
+                rakedir=$(pwd)
+                rakefile=$rakedir/$fn
+                popd &>/dev/null
+                return
+            fi
+        done
+        cd ..
+        [[ $(pwd) = / ]] && break
+    done
+
+    popd >/dev/null
+    return 1
 }
 
 # Outputs the list of possible tasks for the given rakefile and rakedir,
@@ -129,40 +129,40 @@ __rake_get_rakefile() {
 # `$rakedir` or via positional arguments:
 #     (__rake_tasks <rakefile> [rakedir])
 __rake_tasks() {
-  local rakefile=${1:-$rakefile}
-  local rakedir=${2:-$rakedir}
-  [[ -f $rakefile ]] || return 1
-  rakefile=$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")
+    local rakefile=${1:-$rakefile}
+    local rakedir=${2:-$rakedir}
+    [[ -f $rakefile ]] || return 1
+    rakefile=$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")
 
-  local cachedir=$HOME/.local/share/completion-cache
-  local cachefile=$cachedir/rake
-  # uncomment the following lines if you prefer individual caches:
-##  local cachedir=$HOME/.local/share/completion-cache/rake
-##  local cachefile=$cachedir/${rakefile//\//%}
+    local cachedir=$HOME/.local/share/completion-cache
+    local cachefile=$cachedir/rake
+    # Uncomment the following lines if you prefer individual caches:
+##    local cachedir=$HOME/.local/share/completion-cache/rake
+##    local cachefile=$cachedir/${rakefile//\//%}
 
-  local tasks
-  if [[ $cachefile -nt $rakefile &&
-        $(head -n 1 -- "$cachefile") = $rakefile ]]; then
-    tail -n +2 -- "$cachefile"
-  else
-    [[ -d $rakedir ]] && cd "$rakedir"
-    local rake_cmd=${rake_cmd:-rake}
-    tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null |
-            sed -ne '/^rake / {
-              s/^rake \(.*\)/\1/p
-              # for commands with parameters, also offer parameterless version
-              s/\[.*//p
-            }')
-    if [[ $tasks ]]; then
-      # attempt to ensure $cachedir exists and is a directory
-      # before writing to $cachefile
-      ([[ -f $cachedir ]] && rm -- "$cachedir";
-       mkdir -p -- "$cachedir" &&
-       echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
-      echo "$tasks"
+    local tasks
+    if [[ $cachefile -nt $rakefile &&
+          $(head -n 1 -- "$cachefile") = $rakefile ]]; then
+        tail -n +2 -- "$cachefile"
+    else
+        [[ -d $rakedir ]] && cd "$rakedir"
+        local rake_cmd=${rake_cmd:-rake}
+        tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null |
+                sed -ne '/^rake / {
+                  s/^rake \(.*\)/\1/p
+                  # For commands with parameters, also offer parameterless version
+                  s/\[.*//p
+                }')
+        if [[ $tasks ]]; then
+            # Attempt to ensure $cachedir exists and is a directory
+            # before writing to $cachefile
+            ([[ -f $cachedir ]] && rm -- "$cachedir";
+             mkdir -p -- "$cachedir" &&
+             echo "$rakefile"$'\n'"$tasks" >"$cachefile") 2>/dev/null
+            echo "$tasks"
+        fi
     fi
-  fi
 }
 
 complete -F __rake -o bashdefault -o default -o nospace rake rake1.8 rake1.9
-# vim: ai ft=sh sw=2 sts=2 et
+# vim: ai ft=sh sw=4 sts=4 et

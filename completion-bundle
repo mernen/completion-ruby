@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `bundle` command.
 #
-# Copyright (c) 2011-2013 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2011-2017 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
@@ -9,25 +9,25 @@
 #   . completion-bundle
 
 __bundle() {
-  local cur=$2
-  local prev=$3
-  local bundle_command
-  __bundle_get_command
-  COMPREPLY=()
+    local cur=$2
+    local prev=$3
+    local bundle_command
+    __bundle_get_command
+    COMPREPLY=()
 
-  local options
-  if [[ $cur = -* ]]; then
-      options="--no-color --verbose"
-      if [[ -z $bundle_command ]]; then
-          options="$options --version --help"
-      fi
-  else
-      if [[ -z $bundle_command || $bundle_command = help ]]; then
-          options="help install update package exec config check list show
-                   console open viz init gem"
-      fi
-  fi
-  COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    local options
+    if [[ $cur = -* ]]; then
+        options="--no-color --verbose"
+        if [[ -z $bundle_command ]]; then
+            options="$options --version --help"
+        fi
+    else
+        if [[ -z $bundle_command || $bundle_command = help ]]; then
+            options="help install update package exec config check list show
+                     console open viz init gem"
+        fi
+    fi
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
 }
 
 __bundle_get_command() {
@@ -40,7 +40,7 @@ __bundle_get_command() {
             bundle_command=$arg
             return;;
         --version)
-            # command-killer
+            # Command-killer
             bundle_command=-
             return;;
         --help)
@@ -52,4 +52,4 @@ __bundle_get_command() {
 
 
 complete -F __bundle -o bashdefault -o default bundle
-# vim: ai ft=sh sw=4 sts=2 et
+# vim: ai ft=sh sw=4 sts=4 et

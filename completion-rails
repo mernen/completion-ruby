@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `rails` command and rails scripts.
 #
-# Copyright (c) 2008-2013 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2008-2017 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
 # http://mernen.com/projects/completion-ruby
 #
@@ -9,205 +9,205 @@
 #   . completion-rails
 
 __rails() {
-  if [[ -z $__RAILS_VERSION ]]; then
-    local ver=$(rails --version 2>/dev/null)
-    if [[ $ver = "Rails 2."* ]]; then
-      __RAILS_VERSION=__rails2
-    else
-      __RAILS_VERSION=__rails3
+    if [[ -z $__RAILS_VERSION ]]; then
+        local ver=$(rails --version 2>/dev/null)
+        if [[ $ver = "Rails 2."* ]]; then
+            __RAILS_VERSION=__rails2
+        else
+            __RAILS_VERSION=__rails3
+        fi
     fi
-  fi
-  $__RAILS_VERSION "$@"
+    $__RAILS_VERSION "$@"
 }
 
-# sets $rails_command and $rails_subcommand
+# Sets $rails_command and $rails_subcommand
 __rails_get_command() {
-  rails_command=
-  rails_subcommand=
-  local i
-  for ((i=1; i < $COMP_CWORD; ++i)); do
-    local arg=${COMP_WORDS[$i]}
+    rails_command=
+    rails_subcommand=
+    local i
+    for ((i=1; i < $COMP_CWORD; ++i)); do
+        local arg=${COMP_WORDS[$i]}
 
-    case $arg in
-    -b | --builder | -r | --ruby | --root | -m | --template |\
-    -s | --source  | -e | --environment)
-      # ignore next argument
-      ((++i))
-      ;;
-    [^-]*)
-      if [[ -n $rails_command ]]; then
-        rails_subcommand=$arg
-        return
-      else
-        rails_command=$arg
         case $arg in
-          generate | g | destroy | plugin)
-            # continue processing, looking for a subcommand
+        -b | --builder | -r | --ruby | --root | -m | --template |\
+        -s | --source  | -e | --environment)
+            # Ignore next argument
+            ((++i))
             ;;
-          *)
-            # end processing
-            return;;
+        [^-]*)
+            if [[ -n $rails_command ]]; then
+                rails_subcommand=$arg
+                return
+            else
+                rails_command=$arg
+                case $arg in
+                generate | g | destroy | plugin)
+                    # Continue processing, looking for a subcommand
+                    ;;
+                *)
+                    # End processing
+                    return;;
+                esac
+            fi
+            ;;
         esac
-      fi
-      ;;
-    esac
-  done
+    done
 }
 
 __rails_complete_environments() {
-  local environments=(config/environments/*.rb)
-  if [[ -f $environments ]]; then
-    environments=("${environments[@]##*/}")
-    environments=("${environments[@]%.rb}")
-  else
-    environments=(development test production)
-  fi
-  COMPREPLY=($(compgen -W "${environments[*]}" -- "$1"))
+    local environments=(config/environments/*.rb)
+    if [[ -f $environments ]]; then
+        environments=("${environments[@]##*/}")
+        environments=("${environments[@]%.rb}")
+    else
+        environments=(development test production)
+    fi
+    COMPREPLY=($(compgen -W "${environments[*]}" -- "$1"))
 }
 
 
 
 __rails3() {
-  local cur=$2
-  local prev=$3
-  __rails_get_command
-  COMPREPLY=()
+    local cur=$2
+    local prev=$3
+    __rails_get_command
+    COMPREPLY=()
 
-  case $prev in
-  -b | --builder | -r | --ruby | --root | -m | --template | -s | --source)
-    # leave it to complete the path
-    return;;
-  -e | --environment)
-    __rails_complete_environments "$cur"
-    return;;
-  --mode)
-    if [[ $rails_command = dbconsole || $rails_command = db ]]; then
-      local options="html list line column"
-      COMPREPLY=($(compgen -W "$options" -- "$cur"))
-      return
-    fi
-    ;;
-  esac
-
-  local options
-  if [[ $cur = -* ]]; then
-    if [[ -z $rails_command ]]; then
-      options="-h --help -v --version"
-    else
-      local param
-      options=$(rails "$rails_command" $rails_subcommand --help 2>/dev/null |
-                ruby -ne 'puts $_.scan(/(-\w)|(--\w[-\w]*)/)')
-    fi
-  else
-    case $rails_command in
-    "")
-      options=$(rails 2>/dev/null |
-                ruby -ne 'puts $1 if ~/^  rails (\S+)/;
-                          puts $1 if ~/^ (\S+)/;
-                          puts $1 if ~/alias: "(\S+)"/')
-      ;;
-    server | s)
-      # load list dynamically?
-      options="mongrel thin"
-      ;;
-    console | c | dbconsole | db)
-      __rails_complete_environments "$cur"
-      return;;
-    generate | g | destroy)
-      options=$(rails "$rails_command" --help 2>/dev/null |
-                ruby -ne 'puts $1 if ~/^  (\w\S*)/')
-      ;;
-    plugin)
-      options="install remove"
+    case $prev in
+    -b | --builder | -r | --ruby | --root | -m | --template | -s | --source)
+        # Leave it to complete the path
+        return;;
+    -e | --environment)
+        __rails_complete_environments "$cur"
+        return;;
+    --mode)
+        if [[ $rails_command = dbconsole || $rails_command = db ]]; then
+            local options="html list line column"
+            COMPREPLY=($(compgen -W "$options" -- "$cur"))
+            return
+        fi
+        ;;
     esac
-  fi
-  COMPREPLY=($(compgen -W "$options" -- "$cur"))
+
+    local options
+    if [[ $cur = -* ]]; then
+        if [[ -z $rails_command ]]; then
+            options="-h --help -v --version"
+        else
+            local param
+            options=$(rails "$rails_command" $rails_subcommand --help 2>/dev/null |
+                      ruby -ne 'puts $_.scan(/(-\w)|(--\w[-\w]*)/)')
+        fi
+    else
+        case $rails_command in
+        "")
+            options=$(rails 2>/dev/null |
+                      ruby -ne 'puts $1 if ~/^  rails (\S+)/;
+                                puts $1 if ~/^ (\S+)/;
+                                puts $1 if ~/alias: "(\S+)"/')
+            ;;
+        server | s)
+            # Load list dynamically?
+            options="mongrel thin"
+            ;;
+        console | c | dbconsole | db)
+            __rails_complete_environments "$cur"
+            return;;
+        generate | g | destroy)
+            options=$(rails "$rails_command" --help 2>/dev/null |
+                      ruby -ne 'puts $1 if ~/^  (\w\S*)/')
+            ;;
+        plugin)
+            options="install remove"
+        esac
+    fi
+    COMPREPLY=($(compgen -W "$options" -- "$cur"))
 }
 
 
 
 __rails2() {
-  local cur=$2
-  local prev=$3
-  COMPREPLY=()
+    local cur=$2
+    local prev=$3
+    COMPREPLY=()
 
-  case $prev in
-  -r | --ruby)
-    # leave it to complete the path to a binary
-    return;;
-  -d | --database)
-    local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
-    COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
-    return;;
-  esac
+    case $prev in
+    -r | --ruby)
+        # Leave it to complete the path to a binary
+        return;;
+    -d | --database)
+        local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
+        COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
+        return;;
+    esac
 
-  if [[ $cur = -* ]]; then
-    local options="
-      -r --ruby -d --database -f --freeze -v --version -h --help -p --pretend
-      --force -s --skip -q --quiet -t --backtrace -c --svn -g --git"
-    COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  fi
+    if [[ $cur = -* ]]; then
+        local options="
+            -r --ruby -d --database -f --freeze -v --version -h --help -p --pretend
+            --force -s --skip -q --quiet -t --backtrace -c --svn -g --git"
+        COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    fi
 }
 
 __rails2_script_server() {
-  local cur=$2
-  local prev=$3
-  COMPREPLY=()
+    local cur=$2
+    local prev=$3
+    COMPREPLY=()
 
-  case $prev in
-  -e | --environment)
-    __rails_complete_environments "$cur"
-    return;;
-  *)
-    if [[ $cur = -* ]]; then
-      local options="
-        -p --port -b --binding -d --daemon -u --debugger -e --environment"
-      COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    fi
-  esac
+    case $prev in
+    -e | --environment)
+        __rails_complete_environments "$cur"
+        return;;
+    *)
+        if [[ $cur = -* ]]; then
+            local options="
+                -p --port -b --binding -d --daemon -u --debugger -e --environment"
+            COMPREPLY=($(compgen -W "$options" -- "$cur"))
+        fi
+    esac
 }
 
 __rails2_script_console() {
-  local cur=$2
-  local prev=$3
-  COMPREPLY=()
-  if [[ $cur = -* ]]; then
-    local options="-s --sandbox --irb --debugger"
-    COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  elif [[ $prev = --irb ]]; then
-    COMPREPLY=($(compgen -A command -- "$cur"))
-  else
-    __rails_complete_environments "$cur"
-  fi
+    local cur=$2
+    local prev=$3
+    COMPREPLY=()
+    if [[ $cur = -* ]]; then
+        local options="-s --sandbox --irb --debugger"
+        COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    elif [[ $prev = --irb ]]; then
+        COMPREPLY=($(compgen -A command -- "$cur"))
+    else
+        __rails_complete_environments "$cur"
+    fi
 }
 
 __rails2_script_generate() {
-  local cur=$2
-  local prev=$3
-  COMPREPLY=()
-  if [[ $cur = -* ]]; then
-    local options="
-      -v --version -h --help -p --pretend -f --force -s --skip
-      -q --quiet -t --backtrace -c --svn -g --git"
-    COMPREPLY=($(compgen -W "$options" -- "$cur"))
-  elif __rails_get_command && [[ $rails_command = "" ]]; then
-    __rails2_complete_generators "$cur"
-  fi
+    local cur=$2
+    local prev=$3
+    COMPREPLY=()
+    if [[ $cur = -* ]]; then
+        local options="
+            -v --version -h --help -p --pretend -f --force -s --skip
+            -q --quiet -t --backtrace -c --svn -g --git"
+        COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    elif __rails_get_command && [[ $rails_command = "" ]]; then
+        __rails2_complete_generators "$cur"
+    fi
 }
 
 __rails2_complete_generators() {
-  local generators="
-    controller integration_test mailer migration model observer
-    plugin resource scaffold session_migration"
-  COMPREPLY=($(compgen -W "$generators" -- "$1"))
+    local generators="
+        controller integration_test mailer migration model observer
+        plugin resource scaffold session_migration"
+    COMPREPLY=($(compgen -W "$generators" -- "$1"))
 }
 
 
-# clear the version cache, targeted version might change on reload
+# Clear the version cache, targeted version might change on reload
 unset __RAILS_VERSION
 
 complete -F __rails -o bashdefault -o default rails
 complete -F __rails2_script_server -o bashdefault -o default script/server ./script/server
 complete -F __rails2_script_console -o bashdefault -o default script/console ./script/console
 complete -F __rails2_script_generate -o bashdefault -o default script/generate ./script/generate
-# vim: ai ft=sh sw=2 sts=2 et
+# vim: ai ft=sh sw=4 sts=4 et
