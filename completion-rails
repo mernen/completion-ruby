@@ -105,6 +105,11 @@ __rails3() {
                       ruby -ne 'puts $1 if ~/^  rails (\S+)/;
                                 puts $1 if ~/^ (\S+)/;
                                 puts $1 if ~/alias: "(\S+)"/')
+            # If you've already typed one character, let's skip the
+            # single-character shortcuts; this way, typing in "rails c<TAB>"
+            # will instantly complete to "console", rather than just beeping
+            # for ambiguity
+            [[ -n $cur ]] && options=$(grep .. <<<"$options")
             ;;
         server | s)
             # Load list dynamically?
