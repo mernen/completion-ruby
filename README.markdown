@@ -17,7 +17,7 @@ source them individually.
 
 These scripts offer improved directory completion when `bash-completion` is
 available. It should be part of pretty much any modern Linux distribution,
-and you can install it on OS X using [Homebrew][]:
+and you can install it on macOS using [Homebrew]:
 
     brew install bash-completion
 
@@ -49,7 +49,7 @@ overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright © 2008-2012 [Daniel Luz][].
+Copyright © 2008-2017 [Daniel Luz].
 
 **completion-ruby** is distributed under the [MIT license][].
 
@@ -57,13 +57,13 @@ The source is available in a [Git][] repository [at GitHub][repo].
 
 For up-to-date information, visit [this project's permalink][permalink].
 
-[bash]: http://www.gnu.org/software/bash/ (Bourne-Again Shell)
-[Ruby]: http://www.ruby-lang.org/         (Ruby Programming Language)
-[rake]: http://rake.rubyforge.org/        (Rake — Ruby Make)
+[bash]: https://www.gnu.org/software/bash/ (Bourne-Again Shell)
+[Ruby]: https://www.ruby-lang.org/         (Ruby Programming Language)
+[rake]: https://github.com/ruby/rake       (Rake — Ruby Make)
 [Daniel Luz]:  http://mernen.com/
-[MIT license]: http://www.opensource.org/licenses/mit-license.php
-[Git]:  http://git-scm.com/               (Git — Fast Version Control System)
-[Homebrew]: http://mxcl.github.com/homebrew/ (Homebrew – The missing package manager for OS X)
-[MacPorts]: http://www.macports.org/      (The MacPorts Project)
+[MIT license]: https://opensource.org/licenses/MIT
+[Git]:  https://git-scm.com/               (Git — Fast Version Control System)
+[Homebrew]: http://brew.sh (Homebrew – The missing package manager for macOS)
+[MacPorts]: https://www.macports.org/      (The MacPorts Project)
 [repo]: https://github.com/mernen/completion-ruby
 [permalink]: http://mernen.com/projects/completion-ruby
