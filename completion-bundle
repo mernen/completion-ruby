@@ -22,10 +22,25 @@ __bundle() {
             options="$options --version --help"
         fi
     else
-        if [[ -z $bundle_command || $bundle_command = help ]]; then
+        case $bundle_command in
+        "" | help)
             options="help install update package exec config check list show
                      console open viz init gem"
-        fi
+            ;;
+        exec)
+            # Figure out Bundler's binaries dir
+            local bundler_bin=$(bundle exec ruby -e 'puts Bundler.bundle_path + "bin"' 2>/dev/null)
+            if [[ -d $bundler_bin ]]; then
+                local binaries=("$bundler_bin"/*)
+                # If there are binaries, strip directory name and use them
+                [[ -f "$binaries" ]] && options="${binaries[@]##*/}"
+            else
+                # No binaries found; use full command completion
+                COMPREPLY=($(compgen -c -- "$cur"))
+                return
+            fi
+            ;;
+        esac
     fi
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
 }
