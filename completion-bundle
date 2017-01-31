@@ -12,11 +12,12 @@ __bundle() {
     local cur=$2
     local prev=$3
     local bundle_command
+    local bundle_command_index
     __bundle_get_command
     COMPREPLY=()
 
     local options
-    if [[ $cur = -* ]]; then
+    if [[ $cur = -* && $bundle_command != exec ]]; then
         options="--no-color --verbose"
         if [[ -z $bundle_command ]]; then
             options="$options --version --help"
@@ -29,15 +30,20 @@ __bundle() {
                      platform clean doctor"
             ;;
         exec)
-            # Figure out Bundler's binaries dir
-            local bundler_bin=$(bundle exec ruby -e 'puts Bundler.bundle_path + "bin"' 2>/dev/null)
-            if [[ -d $bundler_bin ]]; then
-                local binaries=("$bundler_bin"/*)
-                # If there are binaries, strip directory name and use them
-                [[ -f "$binaries" ]] && options="${binaries[@]##*/}"
+            if [[ $COMP_CWORD -eq $bundle_command_index ]]; then
+                # Figure out Bundler's binaries dir
+                local bundler_bin=$(bundle exec ruby -e 'puts Bundler.bundle_path + "bin"' 2>/dev/null)
+                if [[ -d $bundler_bin ]]; then
+                    local binaries=("$bundler_bin"/*)
+                    # If there are binaries, strip directory name and use them
+                    [[ -f "$binaries" ]] && options="${binaries[@]##*/}"
+                else
+                    # No binaries found; use full command completion
+                    COMPREPLY=($(compgen -c -- "$cur"))
+                    return
+                fi
             else
-                # No binaries found; use full command completion
-                COMPREPLY=($(compgen -c -- "$cur"))
+                _command_offset $bundle_command_index
                 return
             fi
             ;;
@@ -54,6 +60,7 @@ __bundle_get_command() {
         case $arg in
         [^-]*)
             bundle_command=$arg
+            bundle_command_index=$((i + 1))
             return;;
         --version)
             # Command-killer
@@ -61,6 +68,7 @@ __bundle_get_command() {
             return;;
         --help)
             bundle_command=help
+            bundle_command_index=$((i + 1))
             return;;
         esac
     done
