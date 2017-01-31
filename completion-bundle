@@ -18,16 +18,67 @@ __bundle() {
 
     local options
     if [[ $cur = -* && $bundle_command != exec ]]; then
-        options="--no-color --verbose"
-        if [[ -z $bundle_command ]]; then
-            options="$options --version --help"
-        fi
+        options="-V --no-color --no-no-color --verbose --no-verbose"
+        case $bundle_command in
+        "")
+            options="$options --version --help";;
+        check)
+            options="$options --dry-run --gemfile --path -r --retry";;
+        clean)
+            options="$options --dry-run --force";;
+        config)
+            options="$options --local --global --delete";;
+        doctor)
+            options="$options --gemfile --quiet --no-quiet";;
+        gem)
+            options="$options -b -e -t --bin --coc --no-coc --edit --exe
+                     --no-exe --ext --no-ext --mit --no-mit --test";;
+        init)
+            options="$options --gemspec";;
+        install)
+            options="$options --binstubs --clean --deployment --force --frozen
+                     --full-index --gemfile --jobs --local --no-cache
+                     --no-prune --path --quiet --retry --shebang --standalone
+                     --system --trust-policy --with --without";;
+        lock)
+            options="$options --add-platform --conservative --full-index
+                     --local --lockfile --major --minor --patch --print
+                     --remove-platform --strict --update";;
+        platform)
+            options="$options --ruby";;
+        show)
+            options="$options --outdated --paths --no-paths";;
+        update)
+            options="$options --bundler --conservative --force --full-index
+                     --group --jobs --local --major --minor --patch --quiet
+                     --ruby --source --strict";;
+        viz)
+            options="$options -f -F -R -v -W --file --format --requirements
+                     --no-requirements --version --no-version --without";;
+        esac
     else
         case $bundle_command in
         "" | help)
             options="help install update package exec config
                      check show outdated console open lock viz init gem
                      platform clean doctor"
+            ;;
+        check | install)
+            case $prev in
+            --binstubs | --path)
+                _filedir -d
+                return;;
+            --trust-policy)
+                options="HighSecurity MediumSecurity LowSecurity
+                         AlmostNoSecurity NoSecurity";;
+            esac
+            ;;
+        config)
+            case $prev in
+            local.*)
+                _filedir -d
+                return;;
+            esac
             ;;
         exec)
             if [[ $COMP_CWORD -eq $bundle_command_index ]]; then
@@ -46,6 +97,23 @@ __bundle() {
                 _command_offset $bundle_command_index
                 return
             fi
+            ;;
+        gem)
+            case $prev in
+            -e | --edit)
+                COMPREPLY=($(compgen -c -- "$cur"))
+                return;;
+            -t | --test)
+                options="minitest rspec";;
+            esac
+            ;;
+        viz)
+            case $prev in
+            -F | --format)
+                options="dot jpg png svg";;
+            -t | --test)
+                options="minitest rspec";;
+            esac
             ;;
         esac
     fi
