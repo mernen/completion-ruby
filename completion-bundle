@@ -68,6 +68,8 @@ __bundle() {
             --binstubs | --path)
                 _filedir -d
                 return;;
+            --standalone | --with | --without)
+                options="$(__bundle_get_available_groups)";;
             --trust-policy)
                 options="HighSecurity MediumSecurity LowSecurity
                          AlmostNoSecurity NoSecurity";;
@@ -107,12 +109,20 @@ __bundle() {
                 options="minitest rspec";;
             esac
             ;;
+        update)
+            case $prev in
+            --group)
+                options="$(__bundle_get_available_groups)";;
+            esac
+            ;;
         viz)
             case $prev in
             -F | --format)
                 options="dot jpg png svg";;
             -t | --test)
                 options="minitest rspec";;
+            -W | --without)
+                options="$(__bundle_get_available_groups)";;
             esac
             ;;
         esac
@@ -140,6 +150,11 @@ __bundle_get_command() {
             return;;
         esac
     done
+}
+
+# Lists all available groups in the current bundler setup.
+__bundle_get_available_groups() {
+    bundle exec ruby -e 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|)' 2>/dev/null
 }
 
 
