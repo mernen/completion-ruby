@@ -24,8 +24,9 @@ __bundle() {
     else
         case $bundle_command in
         "" | help)
-            options="help install update package exec config check list show
-                     console open viz init gem"
+            options="help install update package exec config
+                     check show outdated console open lock viz init gem
+                     platform clean doctor"
             ;;
         exec)
             # Figure out Bundler's binaries dir
