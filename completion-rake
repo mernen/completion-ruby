@@ -134,10 +134,10 @@ __rake_tasks() {
     [[ -f $rakefile ]] || return 1
     rakefile=$(ruby -e 'puts File.expand_path(ARGV[0])' -- "$rakefile")
 
-    local cachedir=$HOME/.local/share/completion-cache
+    local cachedir=${XDG_CACHE_HOME:-~/.cache}/completion-ruby
     local cachefile=$cachedir/rake
     # Uncomment the following lines if you prefer individual caches:
-##    local cachedir=$HOME/.local/share/completion-cache/rake
+##    local cachedir=${XDG_CACHE_HOME:-~/.cache}/completion-ruby/rake
 ##    local cachefile=$cachedir/${rakefile//\//%}
 
     local tasks
