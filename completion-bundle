@@ -9,8 +9,7 @@
 #   . completion-bundle
 
 __bundle() {
-    local cur=$2
-    local prev=$3
+    _get_comp_words_by_ref -n : cur prev
     local bundle_command
     local bundle_command_index
     __bundle_get_command
@@ -69,7 +68,8 @@ __bundle() {
                 _filedir -d
                 return;;
             --standalone | --with | --without)
-                options="$(__bundle_get_available_groups)";;
+                __bundle_complete_groups
+                return;;
             --trust-policy)
                 options="HighSecurity MediumSecurity LowSecurity
                          AlmostNoSecurity NoSecurity";;
@@ -112,7 +112,8 @@ __bundle() {
         update)
             case $prev in
             --group)
-                options="$(__bundle_get_available_groups)";;
+                __bundle_complete_groups
+                return;;
             esac
             ;;
         viz)
@@ -120,7 +121,8 @@ __bundle() {
             -F | --format)
                 options="dot jpg png svg";;
             -W | --without)
-                options="$(__bundle_get_available_groups)";;
+                __bundle_complete_groups
+                return;;
             esac
             ;;
         esac
@@ -150,9 +152,25 @@ __bundle_get_command() {
     done
 }
 
-# Lists all available groups in the current bundler setup.
-__bundle_get_available_groups() {
-    bundle exec ruby -e 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|)' 2>/dev/null
+# Provides completion for Bundler group names.
+#
+# Multiple groups can be entered, separated either by spaces or by colons.
+#
+# Input is read from $cur, and the result is directly written to $COMPREPLY.
+__bundle_complete_groups() {
+    # Group being currently written
+    local cur_group=${cur##*[ :]}
+    # All groups written before
+    local prefix=${cur%"$cur_group"}
+    # Query Bundler for groups, then strip anything already in prefix
+    # Groups may be separated by ':', ' ', or '\ '; normalize to ':'
+    local groups=$(bundle exec ruby -e '
+            puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s) -
+                 ARGV[0].split(":")' -- "${prefix//[\\ ]/:}" 2>/dev/null)
+    COMPREPLY=($(compgen -W "$groups" -- "$cur_group"))
+    # Prepend prefix to all entries
+    COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
+    __ltrim_colon_completions "$cur"
 }
 
 
