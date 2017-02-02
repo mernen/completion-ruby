@@ -9,6 +9,7 @@
 #   . completion-bundle
 
 __bundle() {
+    local cur prev
     _get_comp_words_by_ref -n : cur prev
     local bundle_command
     local bundle_command_index
@@ -85,7 +86,7 @@ __bundle() {
         exec)
             if [[ $COMP_CWORD -eq $bundle_command_index ]]; then
                 # Figure out Bundler's binaries dir
-                local bundler_bin=$(bundle exec ruby -e 'puts Bundler.bundle_path + "bin"' 2>/dev/null)
+                local bundler_bin=$(__bundle_exec_ruby 'puts Bundler.bundle_path + "bin"')
                 if [[ -d $bundler_bin ]]; then
                     local binaries=("$bundler_bin"/*)
                     # If there are binaries, strip directory name and use them
@@ -155,22 +156,47 @@ __bundle_get_command() {
 # Provides completion for Bundler group names.
 #
 # Multiple groups can be entered, separated either by spaces or by colons.
-#
 # Input is read from $cur, and the result is directly written to $COMPREPLY.
 __bundle_complete_groups() {
     # Group being currently written
     local cur_group=${cur##*[ :]}
     # All groups written before
     local prefix=${cur%"$cur_group"}
-    # Query Bundler for groups, then strip anything already in prefix
-    # Groups may be separated by ':', ' ', or '\ '; normalize to ':'
-    local groups=$(bundle exec ruby -e '
-            puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s) -
-                 ARGV[0].split(":")' -- "${prefix//[\\ ]/:}" 2>/dev/null)
+    local groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
+    # Strip "default" and anything already in prefix
+    # Groups may be separated by ':', ' ', or '\ '
+    groups=$(echo "$groups"$'\ndefault\n'"${prefix//[: \'\"\\]/$'\n'}" | sort | uniq -u)
     COMPREPLY=($(compgen -W "$groups" -- "$cur_group"))
     # Prepend prefix to all entries
     COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
     __ltrim_colon_completions "$cur"
+}
+
+# __bundle_exec_ruby <script> [args...]
+#
+# Runs a Ruby script with Bundler loaded.
+# Results may be cached.
+__bundle_exec_ruby() {
+    # Gemfile is inferred here; might not be correct (for example, when
+    # running on a subdirectory). However, this is not critical; we're just
+    # using this as an identifier to detect when context has changed
+    local gemfile=$PWD/Gemfile
+    local cachedir=${XDG_CACHE_HOME:-~/.cache}/completion-ruby
+    local cachefile=$cachedir/bundle--exec-ruby
+    # `echo` strips excessive whitespace in args, so that it doesn't go beyond a single line
+    local cache_id_lines=$gemfile$'\n'"bundle exec ruby: $(echo $*)"
+
+    if [[ (! -f $gemfile || $cachefile -nt $gemfile) &&
+          $(head -n 2 -- "$cachefile" 2>/dev/null) = "$cache_id_lines" ]]; then
+        tail -n +3 -- "$cachefile"
+    else
+        output=$(bundle exec ruby -e "$@" 2>/dev/null)
+        if [[ $? -eq 0 ]]; then
+            (mkdir -p -- "$cachedir" &&
+             echo "$cache_id_lines"$'\n'"$output" >$cachefile) 2>/dev/null
+            echo "$output"
+        fi
+    fi
 }
 
 
