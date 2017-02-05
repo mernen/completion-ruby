@@ -18,11 +18,7 @@ __rake() {
         # Leave COMPREPLY blank, let the default handle it
         return;;
     -I | --libdir | -R | --rakelibdir)
-        if type -t _filedir >/dev/null; then
-            _filedir -d
-            # Suffix all entries with a slash
-            COMPREPLY=("${COMPREPLY[@]/%//}")
-        fi
+        _filedir -d
         return;;
     *)
         if [[ $cur = -* ]]; then
@@ -69,22 +65,17 @@ __rake() {
                 COMPREPLY=("$cur ")
             fi
 
-            __ltrim_colon_completions "$cur"
-            # Don't perform usual post-processing
-            return
+            compopt -o nospace
         else
             local rakefile rakedir
             __rake_get_rakefile || return
             COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
+            # Remove [parameters] from tasks
+            COMPREPLY=("${COMPREPLY[@]/\[*/[}")
         fi
     esac
 
     __ltrim_colon_completions "$cur"
-
-    # Append a space to all options...
-    COMPREPLY=("${COMPREPLY[@]/%/ }")
-    # ...and remove [parameters] from tasks
-    COMPREPLY=("${COMPREPLY[@]/\[*/[}")
 }
 
 # Finds the appropriate rakefile, given the arguments in the command-line and
@@ -177,5 +168,5 @@ __rake_tasks() {
     fi
 }
 
-complete -F __rake -o bashdefault -o default -o nospace rake rake1.8 rake1.9
+complete -F __rake -o bashdefault -o default rake rake1.8 rake1.9
 # vim: ai ft=sh sw=4 sts=4 et
