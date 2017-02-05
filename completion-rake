@@ -42,14 +42,27 @@ __rake() {
             # $prefix: example[param1,
             local prefix=${cur%"$last_arg"}
 
-            # Ugh, ugly hack here, but I'm out of ideas
-            local old_ifs=$IFS IFS=$'\n'
-            COMPREPLY=($(compgen -o bashdefault -o default -- "$last_arg"))
-            local IFS=$old_ifs
-            # Escape space characters...
-            COMPREPLY=("${COMPREPLY[@]// /\ }")
-            # ...and prepend the prefix to all completion options
-            COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
+            # Fix for quoted arguments
+            local quote_start= quote_end=
+            if [[ $last_arg = \'* ]]; then
+                if [[ $last_arg = *\' ]]; then
+                    quote_end=1
+                    last_arg=${last_arg::-1}
+                    prefix=$prefix\'
+                else
+                    prefix=
+                    last_arg=${last_arg:1}
+                fi
+                quote_start=1
+            fi
+
+            COMPREPLY=()
+            local IFS=$'\n' suggestion
+            for suggestion in $(compgen -o bashdefault -o default -- "$last_arg"); do
+                [[ -z $quote_start ]] && printf -v suggestion %q "$suggestion"
+                [[ -n $quote_end ]] && suggestion=$suggestion\'
+                COMPREPLY+=("$prefix$suggestion")
+            done
 
             # If the user already typed the final "]", consider it a done business
             if [[ ${#COMPREPLY} -eq 0 && $cur = *\] ]]; then
