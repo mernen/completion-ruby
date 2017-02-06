@@ -19,7 +19,7 @@ __ruby() {
         --copyright --version --help"
 
     local i
-    local script_given script_in_path
+    local script_given script_in_path path_script_pos
     local switches_accepted=1
     local complete_dirs
     for ((i=1; i < $COMP_CWORD; ++i)); do
@@ -32,7 +32,8 @@ __ruby() {
             [[ $COMP_CWORD != $((i + 1)) ]] && script_given=1
             break;;
         -S)
-            script_in_path=1;;
+            script_in_path=1
+            path_script_pos=$((i + 1));;
         -e)
             script_given=1
             ((i++));;
@@ -63,6 +64,8 @@ __ruby() {
         elif type -t _filedir >/dev/null; then
             _filedir rb
         fi
+    elif [[ $script_given && $path_script_pos ]]; then
+        _command_offset "$path_script_pos"
     fi
 }
 
