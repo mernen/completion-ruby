@@ -29,6 +29,12 @@ __rake() {
                 -v --verbose -V --version"
             COMPREPLY=($(compgen -W "$options" -- "$cur"))
         elif [[ $cur = *'['* ]]; then
+            # nospace so that we can complete "task[f" into "task[foo" and leave
+            # the cursor at the end (waiting for "," or "]");
+            # noquote so that braces don't get escaped (however, we must now
+            # quote long filenames for ourselves)
+            compopt -o nospace -o noquote
+
             # Parameter completion (using default compgen)
             # $cur: example[param1,param2
             # $args: param1,param2
@@ -39,10 +45,10 @@ __rake() {
             local prefix=${cur%"$last_arg"}
 
             # Fix for quoted arguments
-            local quote_start= quote_end=
+            local quote_start suffix
             if [[ $last_arg = \'* ]]; then
                 if [[ $last_arg = *\' ]]; then
-                    quote_end=1
+                    suffix=\'
                     last_arg=${last_arg::-1}
                     prefix=$prefix\'
                 else
@@ -52,26 +58,26 @@ __rake() {
                 quote_start=1
             fi
 
+            cur=$last_arg _filedir
+            local suggestion filedir_out=("${COMPREPLY[@]}")
             COMPREPLY=()
-            local IFS=$'\n' suggestion
-            for suggestion in $(compgen -o bashdefault -o default -- "$last_arg"); do
-                [[ -z $quote_start ]] && printf -v suggestion %q "$suggestion"
-                [[ -n $quote_end ]] && suggestion=$suggestion\'
-                COMPREPLY+=("$prefix$suggestion")
+            for suggestion in "${filedir_out[@]}"; do
+                [[ ! $quote_start ]] && printf -v suggestion %q "$suggestion"
+                COMPREPLY+=("$prefix$suggestion$suffix")
             done
 
             # If the user already typed the final "]", consider it a done business
             if [[ ${#COMPREPLY} -eq 0 && $cur = *\] ]]; then
                 COMPREPLY=("$cur ")
             fi
-
-            compopt -o nospace
         else
             local rakefile rakedir
             __rake_get_rakefile || return
             COMPREPLY=($(compgen -W "$(__rake_tasks)" -- "$cur"))
             # Remove [parameters] from tasks
             COMPREPLY=("${COMPREPLY[@]/\[*/[}")
+            # Disable quoting so that semicolons in task names don't get escaped
+            compopt -o noquote
         fi
     esac
 
