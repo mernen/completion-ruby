@@ -9,6 +9,7 @@
 #   . completion-bundle
 
 __bundle() {
+    local bundle_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
     local cur prev
     _get_comp_words_by_ref -n : cur prev
     local bundle_command
@@ -131,6 +132,7 @@ __bundle() {
                     return
                 fi
             else
+                local _RUBY_COMMAND_PREFIX=("${bundle_bin[@]}" exec)
                 _command_offset $bundle_command_index
                 return
             fi
@@ -218,13 +220,14 @@ __bundle_exec_ruby() {
     local cachedir=${XDG_CACHE_HOME:-~/.cache}/completion-ruby
     local cachefile=$cachedir/bundle--exec-ruby
     # `echo` strips excessive whitespace in args, so that it doesn't go beyond a single line
-    local cache_id_lines=$gemfile$'\n'"bundle exec ruby: $(echo $*)"
+    local cache_id_lines=$gemfile$'\n'"${bundle_bin[*]} exec ruby: $(echo $*)"
 
     if [[ (! -f $gemfile || $cachefile -nt $gemfile) &&
           $(head -n 2 -- "$cachefile" 2>/dev/null) = "$cache_id_lines" ]]; then
         tail -n +3 -- "$cachefile"
     else
-        output=$(bundle exec ruby -e "$@" 2>/dev/null)
+        local bundle_bin=(${bundle_bin[@]:-bundle})
+        output=$("${bundle_bin[@]}" exec ruby -e "$@" 2>/dev/null)
         if [[ $? -eq 0 ]]; then
             (mkdir -p -- "$cachedir" &&
              echo "$cache_id_lines"$'\n'"$output" >$cachefile) 2>/dev/null

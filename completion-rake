@@ -9,7 +9,7 @@
 #   . completion-rake
 
 __rake() {
-    local rake_cmd="$1"
+    local rake_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
     _get_comp_words_by_ref -n : cur prev
     COMPREPLY=()
 
@@ -156,8 +156,8 @@ __rake_tasks() {
         tail -n +2 -- "$cachefile"
     else
         [[ -d $rakedir ]] && cd "$rakedir"
-        local rake_cmd=${rake_cmd:-rake}
-        tasks=$("$rake_cmd" --rakefile "$rakefile" --silent --describe 2>/dev/null |
+        local rake_bin=(${rake_bin[@]:-rake})
+        tasks=$("${rake_bin[@]}" --rakefile "$rakefile" --silent --describe 2>/dev/null |
                 sed -ne '/^rake / {
                   s/^rake \(.*\)/\1/p
                   # For commands with parameters, also offer parameterless version

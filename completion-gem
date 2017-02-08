@@ -9,7 +9,7 @@
 #   . completion-gem
 
 __gem() {
-    local cmd=$1
+    local gem_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
     local cur=$2
     local prev=$3
     COMPREPLY=()
@@ -85,12 +85,12 @@ __gem_get_command() {
 
 # Outputs a list of installed gems, one per line.
 __gem_installed_gems() {
-    "$cmd" list --local --no-details 2>/dev/null | awk '/^[^ ]+ \(/ { print $1 }'
+    "${gem_bin[@]}" list --local --no-details 2>/dev/null | awk '/^[^ ]+ \(/ { print $1 }'
 }
 
 # Outputs a list of available commands, one per line.
 __gem_available_commands() {
-    "$cmd" help commands 2>/dev/null | awk '/^    [^ ]/ { print $1 }'
+    "${gem_bin[@]}" help commands 2>/dev/null | awk '/^    [^ ]/ { print $1 }'
 }
 
 # Performs `gem help $1`, scans output for options, emits them one per line.
@@ -104,7 +104,7 @@ __gem_command_options() {
     # Also, some options come with optional parts, like "--[no-]ri";
     # we first emit the version with these parts included, then omit
     # them.
-    "$cmd" help "$1" 2>/dev/null |
+    "${gem_bin[@]}" help "$1" 2>/dev/null |
         ruby -ne '
             if /^  (\S.*):/
               exit unless $1.include? "Options"

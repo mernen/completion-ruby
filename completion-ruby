@@ -65,6 +65,7 @@ __ruby() {
             _filedir rb
         fi
     elif [[ $script_given && $path_script_pos ]]; then
+        local _RUBY_COMMAND_PREFIX=("${_RUBY_COMMAND_PREFIX[@]}" "$cmd" -S)
         _command_offset "$path_script_pos"
     fi
 }
