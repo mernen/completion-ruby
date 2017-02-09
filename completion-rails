@@ -1,5 +1,5 @@
 #! bash
-# bash completion for the `rails` command and rails scripts.
+# bash completion for the `rails` command.
 #
 # Copyright (c) 2008-2017 Daniel Luz <dev at mernen dot com>.
 # Distributed under the MIT license.
@@ -7,19 +7,6 @@
 #
 # To use, source this file on bash:
 #   . completion-rails
-
-__rails() {
-    local rails_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
-    if [[ -z $__RAILS_VERSION ]]; then
-        local ver=$("${rails_bin[@]}" --version 2>/dev/null)
-        if [[ $ver = "Rails 2."* ]]; then
-            __RAILS_VERSION=__rails2
-        else
-            __RAILS_VERSION=__rails3
-        fi
-    fi
-    $__RAILS_VERSION "$@"
-}
 
 # Sets $rails_command and $rails_subcommand
 __rails_get_command() {
@@ -68,7 +55,8 @@ __rails_complete_environments() {
 
 
 
-__rails3() {
+__rails() {
+    local rails_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
     local cur=$2
     local prev=$3
     __rails_get_command
@@ -131,89 +119,5 @@ __rails3() {
 }
 
 
-
-__rails2() {
-    local cur=$2
-    local prev=$3
-    COMPREPLY=()
-
-    case $prev in
-    -r | --ruby)
-        # Leave it to complete the path to a binary
-        return;;
-    -d | --database)
-        local dbs="mysql oracle postgresql sqlite2 sqlite3 frontbase ibm_db"
-        COMPREPLY=($(compgen -W "$dbs" -- "$cur"))
-        return;;
-    esac
-
-    if [[ $cur = -* ]]; then
-        local options="
-            -r --ruby -d --database -f --freeze -v --version -h --help -p --pretend
-            --force -s --skip -q --quiet -t --backtrace -c --svn -g --git"
-        COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    fi
-}
-
-__rails2_script_server() {
-    local cur=$2
-    local prev=$3
-    COMPREPLY=()
-
-    case $prev in
-    -e | --environment)
-        __rails_complete_environments "$cur"
-        return;;
-    *)
-        if [[ $cur = -* ]]; then
-            local options="
-                -p --port -b --binding -d --daemon -u --debugger -e --environment"
-            COMPREPLY=($(compgen -W "$options" -- "$cur"))
-        fi
-    esac
-}
-
-__rails2_script_console() {
-    local cur=$2
-    local prev=$3
-    COMPREPLY=()
-    if [[ $cur = -* ]]; then
-        local options="-s --sandbox --irb --debugger"
-        COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    elif [[ $prev = --irb ]]; then
-        COMPREPLY=($(compgen -A command -- "$cur"))
-    else
-        __rails_complete_environments "$cur"
-    fi
-}
-
-__rails2_script_generate() {
-    local cur=$2
-    local prev=$3
-    COMPREPLY=()
-    if [[ $cur = -* ]]; then
-        local options="
-            -v --version -h --help -p --pretend -f --force -s --skip
-            -q --quiet -t --backtrace -c --svn -g --git"
-        COMPREPLY=($(compgen -W "$options" -- "$cur"))
-    elif __rails_get_command && [[ $rails_command = "" ]]; then
-        __rails2_complete_generators "$cur"
-    fi
-}
-
-__rails2_complete_generators() {
-    local generators="
-        controller integration_test mailer migration model observer
-        plugin resource scaffold session_migration"
-    COMPREPLY=($(compgen -W "$generators" -- "$1"))
-}
-
-
-# Clear the version cache, targeted version might change on reload
-unset __RAILS_VERSION
-
 complete -F __rails -o bashdefault -o default rails
-complete -F __rails2_script_server -o bashdefault -o default script/server ./script/server
-complete -F __rails2_script_console -o bashdefault -o default script/console ./script/console
-complete -F __rails2_script_generate -o bashdefault -o default script/generate ./script/generate
 # vim: ai ft=sh sw=4 sts=4 et
