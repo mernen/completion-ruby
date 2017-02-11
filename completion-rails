@@ -10,8 +10,6 @@
 
 # Sets $rails_command and $rails_subcommand
 __rails_get_command() {
-    rails_command=
-    rails_subcommand=
     local i
     for ((i=1; i < $COMP_CWORD; ++i)); do
         local arg=${COMP_WORDS[$i]}
@@ -104,6 +102,7 @@ __rails() {
     local rails_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
     local cur=$2
     local prev=$3
+    local rails_command rails_subcommand
     __rails_get_command
     COMPREPLY=()
 

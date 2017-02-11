@@ -227,7 +227,7 @@ __bundle_exec_ruby() {
         tail -n +3 -- "$cachefile"
     else
         local bundle_bin=(${bundle_bin[@]:-bundle})
-        output=$("${bundle_bin[@]}" exec ruby -e "$@" 2>/dev/null)
+        local output=$("${bundle_bin[@]}" exec ruby -e "$@" 2>/dev/null)
         if [[ $? -eq 0 ]]; then
             (mkdir -p -- "$cachedir" &&
              echo "$cache_id_lines"$'\n'"$output" >$cachefile) 2>/dev/null
