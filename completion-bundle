@@ -199,10 +199,16 @@ __bundle_complete_groups() {
     # All groups written before
     local prefix=${cur%"$cur_group"}
     local groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
-    # Strip "default" and anything already in prefix
-    # Groups may be separated by ':', ' ', or '\ '
-    groups=$(echo "$groups"$'\ndefault\n'"${prefix//[: \'\"\\]/$'\n'}" | sort | uniq -u)
-    COMPREPLY=($(compgen -W "$groups" -- "$cur_group"))
+    if [[ ! $groups ]]; then
+        COMPREPLY=()
+        return
+    fi
+    # Duplicate "default" and anything already in $prefix, so that `uniq`
+    # strips it; groups may be separated by ':', ' ', or '\ '
+    local excluded=$'\ndefault\n'${prefix//[: \'\"\\]/$'\n'}
+    # Include them twice to ensure they are duplicates
+    groups=$groups$excluded$excluded
+    COMPREPLY=($(compgen -W "$(sort <<<"$groups" | uniq -u)" -- "$cur_group"))
     # Prepend prefix to all entries
     COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
     __ltrim_colon_completions "$cur"
