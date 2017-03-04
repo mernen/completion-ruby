@@ -3,7 +3,7 @@
 **completion-ruby** is a set of [bash][] scripts offering command-line
 completion for various [Ruby][]-related commands and tools.
 
-## Usage
+## Installation
 
 Save the completion files somewhere (in the same directory) and add the
 following line to your `~/.bashrc` or `~/.profile`:
@@ -15,18 +15,11 @@ but only for the commands you appear to have installed.
 Alternatively, you can just save the specific scripts you wish, and
 source them individually.
 
-These scripts offer improved directory completion when `bash-completion` is
-available. It should be part of pretty much any modern Linux distribution,
-and you can install it on macOS using [Homebrew]:
+These scripts depend on some utility functions from [bash-completion]. It
+should be part of pretty much any modern Linux distribution, and you can
+install it on macOS using [Homebrew]:
 
     brew install bash-completion
-
-Or [MacPorts][]:
-
-    sudo port install bash-completion
-
-`bash-completion` is a dependency of [Git][]'s completion, so if you have
-that working already you should be fine.
 
 ## Why yet another completion script?
 
@@ -58,12 +51,12 @@ The source is available in a [Git][] repository [at GitHub][repo].
 For up-to-date information, visit [this project's permalink][permalink].
 
 [bash]: https://www.gnu.org/software/bash/ (Bourne-Again Shell)
+[bash-completion]: https://github.com/scop/bash-completion
 [Ruby]: https://www.ruby-lang.org/         (Ruby Programming Language)
 [rake]: https://github.com/ruby/rake       (Rake — Ruby Make)
 [Daniel Luz]:  http://mernen.com/
 [MIT license]: https://opensource.org/licenses/MIT
 [Git]:  https://git-scm.com/               (Git — Fast Version Control System)
 [Homebrew]: http://brew.sh (Homebrew – The missing package manager for macOS)
-[MacPorts]: https://www.macports.org/      (The MacPorts Project)
 [repo]: https://github.com/mernen/completion-ruby
 [permalink]: http://mernen.com/projects/completion-ruby
