@@ -5,6 +5,12 @@ completion for various [Ruby][]-related commands and tools.
 
 ## Installation
 
+These scripts depend on some utility functions from [bash-completion]. It
+should be part of pretty much any modern Linux distribution, and you can
+install it on macOS using [Homebrew]:
+
+    brew install bash-completion
+
 Save the completion files somewhere (in the same directory) and add the
 following line to your `~/.bashrc` or `~/.profile`:
 
@@ -14,12 +20,6 @@ The `completion-ruby-all` script loads all the completions it finds,
 but only for the commands you appear to have installed.
 Alternatively, you can just save the specific scripts you wish, and
 source them individually.
-
-These scripts depend on some utility functions from [bash-completion]. It
-should be part of pretty much any modern Linux distribution, and you can
-install it on macOS using [Homebrew]:
-
-    brew install bash-completion
 
 ## Why yet another completion script?
 
