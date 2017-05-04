@@ -19,10 +19,10 @@ __bundle() {
 
     local options
     if [[ $cur = -* && $bundle_command != exec ]]; then
-        options="-V --no-color --no-no-color --verbose --no-verbose"
+        options="-V --help --no-color --no-no-color --verbose --no-verbose"
         case $bundle_command in
         "")
-            options="$options --version --help";;
+            options="$options --version";;
         check)
             options="$options --dry-run --gemfile --path -r --retry";;
         clean)
