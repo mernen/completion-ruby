@@ -82,7 +82,7 @@ __bundle() {
             config | --*)
                 case $cur in
                 local.*)
-                    options=($(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:name)'))
+                    options=($(__bundle_exec_ruby 'puts Bundler.definition.specs.to_hash.keys'))
                     options=("${options[*]/#/local.}")
                     ;;
                 *)
@@ -164,7 +164,7 @@ __bundle() {
             ;;
         esac
     fi
-    COMPREPLY=($(compgen -W "$options" -- "$cur"))
+    COMPREPLY=($(compgen -W "${options[*]}" -- "$cur"))
 }
 
 __bundle_get_command() {
