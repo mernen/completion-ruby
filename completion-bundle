@@ -45,6 +45,8 @@ __bundle() {
             options="$options --add-platform --conservative --full-index
                      --local --lockfile --major --minor --patch --print
                      --remove-platform --strict --update";;
+        package)
+            options="$options --all --all-platforms";;
         platform)
             options="$options --ruby";;
         show)
