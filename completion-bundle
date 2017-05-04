@@ -151,6 +151,8 @@ __bundle() {
             --group)
                 __bundle_complete_groups
                 return;;
+            *)
+                options=($(__bundle_exec_ruby 'puts Bundler.definition.specs.to_hash.keys'))
             esac
             ;;
         viz)
