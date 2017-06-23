@@ -157,7 +157,7 @@ __rake_tasks() {
     else
         [[ -d $rakedir ]] && cd "$rakedir"
         local rake_bin=(${rake_bin[@]:-rake})
-        tasks=$("${rake_bin[@]}" --rakefile "$rakefile" --silent --describe 2>/dev/null |
+        tasks=$("${rake_bin[@]}" --rakefile "$rakefile" --silent --prereqs 2>/dev/null |
                 sed -ne '/^rake / {
                   s/^rake \(.*\)/\1/p
                   # For commands with parameters, also offer parameterless version
