@@ -22,12 +22,7 @@ __rake() {
         return;;
     *)
         if [[ $cur = -* ]]; then
-            local options="
-                -C --classic-namespace -D --describe -n --dry-run -h --help
-                -I --libdir -N --nosearch -P --prereqs -q --quiet -f --rakefile
-                -R --rakelibdir -r --require -s --silent -T --tasks -t --trace
-                -v --verbose -V --version"
-            COMPREPLY=($(compgen -W "$options" -- "$cur"))
+            COMPREPLY=($("${rake_bin[@]:-rake}" "--*-completion-bash=$cur"))
         elif [[ $cur = *'['* ]]; then
             # nospace so that we can complete "task[f" into "task[foo" and leave
             # the cursor at the end (waiting for "," or "]");
