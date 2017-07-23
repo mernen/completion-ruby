@@ -22,7 +22,18 @@ __rake() {
         return;;
     *)
         if [[ $cur = -* ]]; then
-            COMPREPLY=($("${rake_bin[@]:-rake}" "--*-completion-bash=$cur"))
+            local options=$("${rake_bin[@]:-rake}" "--*-completion-bash=$cur")
+            # --*-completion-bash will perform a case-insensitive match;
+            # let's pass through compgen to make it case-sensitive, as it avoids
+            # some surprises
+            COMPREPLY=($(compgen -W "$options" -- "$cur"))
+            # Some tasks will be suffixed with a equals sign; in this case,
+            # we want not to suffix the completion with a space. To do so, we
+            # enable nospace, then add the space ourselves to entries that do
+            # not end in `=`
+            compopt -o nospace
+            COMPREPLY=("${COMPREPLY[@]/%/ }")
+            COMPREPLY=("${COMPREPLY[@]/%= /=}")
         elif [[ $cur = *'['* ]]; then
             # nospace so that we can complete "task[f" into "task[foo" and leave
             # the cursor at the end (waiting for "," or "]");
