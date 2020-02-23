@@ -118,5 +118,5 @@ __gem_command_options() {
             end' 2>/dev/null
 }
 
-complete -F __gem -o bashdefault -o default gem gem1.8 gem1.9 jgem
+complete -F __gem -o bashdefault -o default gem gem1.{8..9} gem2.{0..7} jgem
 # vim: ai ft=sh sw=4 sts=4 et

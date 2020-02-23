@@ -95,7 +95,7 @@ else
         }
     fi
 
-    _cr_load gem gem1.8 gem1.9 jgem
+    _cr_load gem gem1.{8..9} gem2.{0..7} jgem
     _cr_load jruby
     _cr_load rails
     _cr_load bundle
