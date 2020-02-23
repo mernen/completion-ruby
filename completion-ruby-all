@@ -98,7 +98,7 @@ else
     _cr_load gem gem1.8 gem1.9 jgem
     _cr_load jruby
     _cr_load rails
-    _cr_load bundle
+    _cr_load bundle bundler
     _cr_load rake
     _cr_load ruby ruby1.8 ruby1.9
 

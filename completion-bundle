@@ -250,5 +250,5 @@ __bundle_exec_ruby() {
 }
 
 
-complete -F __bundle -o bashdefault -o default bundle
+complete -F __bundle -o bashdefault -o default bundle bundler
 # vim: ai ft=sh sw=4 sts=4 et
