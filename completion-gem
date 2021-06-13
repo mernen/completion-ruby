@@ -25,7 +25,7 @@ __gem() {
         return
     elif [[ $prev = --*dir || ${COMP_WORDS[$COMP_CWORD]} = --*dir=* ]]; then
         # Assume any option ending in 'dir' takes a directory name
-        type -t _filedir >/dev/null && _filedir -d "$cur"
+        type -t _filedir >/dev/null && _filedir -d
         return
     fi
 
@@ -46,7 +46,7 @@ __gem() {
         uninstall | cleanup)
             choices=$(__gem_installed_gems);;
         push)
-            type -t _filedir >/dev/null && _filedir "*.gem" "$cur"
+            type -t _filedir >/dev/null && _filedir gem
             return;;
         esac
     fi
