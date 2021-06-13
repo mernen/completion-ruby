@@ -1,7 +1,7 @@
 # completion-ruby: bash completion for Ruby-related commands
 
-**completion-ruby** is a set of [bash][] scripts offering command-line
-completion for various [Ruby][]-related commands and tools.
+**completion-ruby** is a set of [bash] scripts offering command-line
+completion for various [Ruby]-related commands and tools.
 
 ## Installation
 
@@ -42,11 +42,11 @@ overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright © 2008-2017 [Daniel Luz].
+Copyright © 2008-2021 [Daniel Luz].
 
-**completion-ruby** is distributed under the [MIT license][].
+**completion-ruby** is distributed under the [MIT license].
 
-The source is available in a [Git][] repository [at GitHub][repo].
+The source is available in a [Git] repository [at GitHub][repo].
 
 For up-to-date information, visit [this project's permalink][permalink].
 
@@ -54,9 +54,9 @@ For up-to-date information, visit [this project's permalink][permalink].
 [bash-completion]: https://github.com/scop/bash-completion
 [Ruby]: https://www.ruby-lang.org/         (Ruby Programming Language)
 [rake]: https://github.com/ruby/rake       (Rake — Ruby Make)
-[Daniel Luz]:  http://mernen.com/
+[Daniel Luz]:  https://mernen.com/
 [MIT license]: https://opensource.org/licenses/MIT
 [Git]:  https://git-scm.com/               (Git — Fast Version Control System)
-[Homebrew]: http://brew.sh (Homebrew – The missing package manager for macOS)
+[Homebrew]: https://brew.sh (Homebrew – The missing package manager for macOS)
 [repo]: https://github.com/mernen/completion-ruby
-[permalink]: http://mernen.com/projects/completion-ruby
+[permalink]: https://mernen.com/projects/completion-ruby
