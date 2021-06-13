@@ -82,7 +82,7 @@ __rails_exec() {
         local output
         if [[ ${@: -2:1} = \| ]]; then
             # ruby pipe follows
-            local args=${@:1:$#-2}
+            local args=(${@:1:$#-2})
             local ruby_script=${@: -1}
             output=$("${rails_bin[@]}" "${args[@]}" 2>/dev/null |
                      ruby -ne "$ruby_script" 2>/dev/null)
