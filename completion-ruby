@@ -1,9 +1,9 @@
 #! bash
 # bash completion for the `ruby` command.
 #
-# Copyright (c) 2009-2017 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2009-2021 Daniel Luz <dev dot gsz at mernen dot com>.
 # Distributed under the MIT license.
-# http://mernen.com/projects/completion-ruby
+# https://mernen.com/projects/completion-ruby
 #
 # To use, source this file on bash:
 #   . completion-ruby
