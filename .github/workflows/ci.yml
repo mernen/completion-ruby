@@ -1,0 +1,12 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download Earthly
+      run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.16/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+    - run: earthly +test
