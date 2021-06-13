@@ -35,10 +35,10 @@ __rake() {
             COMPREPLY=("${COMPREPLY[@]/%/ }")
             COMPREPLY=("${COMPREPLY[@]/%= /=}")
         elif [[ $cur = *'['* ]]; then
-            # nospace so that we can complete "task[f" into "task[foo" and leave
-            # the cursor at the end (waiting for "," or "]");
-            # noquote so that braces don't get escaped (however, we must now
-            # quote long filenames for ourselves)
+            # - `nospace` so that we can complete "task[f" into "task[foo"
+            #   and leave the cursor at the end (waiting for "," or "]");
+            # - `noquote` so that braces don't get escaped (however, quoting
+            #   long filenames becomes our responsibility)
             compopt -o nospace -o noquote
 
             # Parameter completion (using default compgen)
