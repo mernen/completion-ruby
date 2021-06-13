@@ -16,6 +16,7 @@ __gem() {
 
     local gem_command
     __gem_get_command
+    [[ $gem_command = i ]] && gem_command=install
 
     # Can't do anything with non-commands
     [[ $gem_command = - ]] && return
@@ -43,6 +44,24 @@ __gem() {
             choices=$(__gem_available_commands);;
         help)
             choices="commands examples platforms $(__gem_available_commands)";;
+        build)
+            if type -t _filedir >/dev/null; then
+                if [[ $prev = -C ]]; then
+                    _filedir -d
+                else
+                    _filedir gemspec
+                fi
+            fi
+            return;;
+        install)
+            if type -t _filedir >/dev/null; then
+                if [[ $prev = -i || $prev = -n || $prev = --build-root || ${COMP_WORDS[$COMP_CWORD]} = --build-root=* ]]; then
+                    _filedir -d
+                else
+                    _filedir gem
+                fi
+            fi
+            return;;
         uninstall | cleanup)
             choices=$(__gem_installed_gems);;
         push)
