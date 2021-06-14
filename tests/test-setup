@@ -1,34 +1,70 @@
 #! bash
 [[ -n $BASH_COMPLETION_SCRIPT ]] && source "$BASH_COMPLETION_SCRIPT"
 
+begin-test() {
+    echo "TEST: $1"
+}
+
+end-test() {
+    local status=$?
+    if [[ $status -eq 0 ]]; then
+        echo 'PASS'
+        echo
+    else
+        if [[ -n $_TEST_BINARIES ]]; then
+            local bin
+            for bin in "${_TEST_BINARIES[@]}"; do
+                "$bin" --version
+            done
+        fi
+        exit $status
+    fi
+}
+
 test-completion() {
-    print-array 'RUNNING TEST:    ' "$@"
+    print-array 'RUNNING TEST:       ' "$@"
     _COMPLETION_TEST=($@)
     COMP_WORDS=($@)
-    COMP_CWORD=$((${#@} - 1))
+    COMP_CWORD=$(($# - 1))
     COMP_LINE="$*"
     COMP_POINT=${#COMP_LINE}
     "$_TEST_FN" "$1" "${@: -1}" "${@: -2:1}"
 }
 
 expect() {
-    print-array 'EXPECTED RESULT: ' "$@"
+    print-array 'EXPECTED RESULT:    ' "$@"
     local word
     for word in "$@"; do
         if ! [[ " ${COMPREPLY[@]} " =~ " $word " ]]; then
             echo 'Completion failed!'
-            print-array '  Command:  ' "${_COMPLETION_TEST[@]}"
-            print-array '  Output:   ' "${COMPREPLY[@]}"
-            echo "  Missing:   $(printf "%q" "$word")"
+            print-array '  Command:   ' "${_COMPLETION_TEST[@]}"
+            print-array '  Output:    ' "${COMPREPLY[@]}"
+            echo "  Missing:    $(printf "%q" "$word")"
             exit 1
         fi >&2
     done
-    echo PASS
-    echo
+}
+
+reject() {
+    print-array 'SHOULD NOT INCLUDE: ' "$@"
+    local word
+    for word in "$@"; do
+        if [[ " ${COMPREPLY[@]} " =~ " $word " ]]; then
+            echo 'Completion failed!'
+            print-array '  Command:   ' "${_COMPLETION_TEST[@]}"
+            print-array '  Output:    ' "${COMPREPLY[@]}"
+            echo "  Unexpected: $(printf "%q" "$word")"
+            exit 1
+        fi >&2
+    done
 }
 
 print-array() {
     echo -n "$1"
+    if [[ $# -eq 1 ]]; then
+        echo ' (empty)'
+        return
+    fi
     while [[ $# -gt 1 ]]; do
         shift
         printf ' %q' "$1"
