@@ -32,6 +32,15 @@ setup-rails-app:
             bundle; \
         fi
 
+
+test:
+    BUILD +test-bundle-all
+    BUILD +test-jruby-all
+    BUILD +test-rails-all
+    BUILD +test-rake-all
+    BUILD +test-ruby-all
+
+
 test-bundle:
     FROM +setup-rails-app
 
@@ -44,6 +53,23 @@ test-bundle-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-bundle
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-bundle
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-bundle
+
+
+test-jruby:
+    ARG JRUBY_VERSION=9
+    FROM jruby:$JRUBY_VERSION
+
+    COPY +bash-completion/bash_completion /usr/src/bash_completion
+    ENV BASH_COMPLETION_SCRIPT=/usr/src/bash_completion
+
+    WORKDIR /usr/src/completion-ruby
+    COPY --dir ./completion-jruby ./completion-ruby ./tests ./
+    RUN ./tests/completion-jruby/test.sh
+
+test-jruby-all:
+    BUILD --build-arg JRUBY_VERSION=9.1 +test-jruby
+    BUILD --build-arg JRUBY_VERSION=9.2 +test-jruby
+
 
 test-rails:
     FROM +setup-rails-app
@@ -58,6 +84,7 @@ test-rails-all:
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rails
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rails
 
+
 test-rake:
     FROM +setup-rails-app
 
@@ -70,6 +97,7 @@ test-rake-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rake
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rake
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rake
+
 
 test-ruby:
     FROM +baseline
@@ -89,8 +117,3 @@ test-ruby-all:
     BUILD --build-arg RUBY_VERSION=2.6 +test-ruby
     BUILD --build-arg RUBY_VERSION=2.7 +test-ruby
     BUILD --build-arg RUBY_VERSION=3.0 +test-ruby
-
-test:
-    BUILD +test-rails-all
-    BUILD +test-rake-all
-    BUILD +test-ruby-all
