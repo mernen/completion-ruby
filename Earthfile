@@ -25,6 +25,13 @@ setup-rails-app:
         --skip-puma
     ENV RAILS_TEST_APP_DIR=/usr/src/testapp
 
+    # In Ruby 3 we need to explicitly declare REXML as a dependency
+    RUN if [ ${RUBY_VERSION%%.*} -ge 3 ]; then \
+            cd "$RAILS_TEST_APP_DIR" && \
+            echo 'gem "rexml"' >>Gemfile && \
+            bundle; \
+        fi
+
 test-rails:
     FROM +setup-rails-app
 
@@ -49,6 +56,7 @@ test-rake-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>5.0" +test-rake
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rake
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rake
+    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rake
 
 test-ruby:
     FROM +baseline
