@@ -5,10 +5,6 @@ source "$(dirname "$0")/../../completion-ruby"
 _TEST_FN=__ruby
 _TEST_BINARIES=(ruby)
 
-touch foo.rb
-touch bar.rb
-touch baz.rb
-
 begin-test 'should suggest options'
 (
     test-completion ruby -

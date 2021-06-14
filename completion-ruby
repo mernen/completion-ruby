@@ -15,8 +15,11 @@ __ruby() {
     COMPREPLY=()
 
     local options="
-        -0 -a -c -C -d -e -F -h -i -I -K -l -n -p -r -s -S -T -v -w -W0 -W1 -W2 -x
-        --copyright --version --help"
+        -0 -a -c -C -d -e -E -F -h -i -I -K -l -n -p -r -s -S -T -U -v -w -W0 -W1 -W2 -x
+        --encoding --external-encoding --internal-encoding
+        --disable-all --disable-gems --disable-rubyopt
+        --enable-all --enable-gems --enable-rubyopt
+        --debug --copyright --help --verbose --version"
 
     local i
     local script_given script_in_path path_script_pos
