@@ -32,6 +32,19 @@ setup-rails-app:
             bundle; \
         fi
 
+test-bundle:
+    FROM +setup-rails-app
+
+    WORKDIR /usr/src/completion-ruby
+    COPY --dir ./completion-bundle ./completion-rails ./completion-rake ./tests ./
+    RUN ./tests/completion-bundle/test.sh
+
+test-bundle-all:
+    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>5.0" +test-bundle
+    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-bundle
+    BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-bundle
+    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-bundle
+
 test-rails:
     FROM +setup-rails-app
 

@@ -12,6 +12,7 @@ end-test() {
         echo
     else
         if [[ -n $_TEST_BINARIES ]]; then
+            echo
             local bin
             for bin in "${_TEST_BINARIES[@]}"; do
                 "$bin" --version
