@@ -17,9 +17,10 @@ __jruby() {
     COMPREPLY=()
 
     local options="
-        -b -J --debug --jdb --properties --sample --client --server --manager
-        --headless --1.8 --1.9 --bytecode -X-O -X+O -X-C -X+C --fast
-        --ng --ng-server"
+        -G -J --jdb --environment --properties --sample --client --server --manager
+        --disable --enable
+        --headless --bytecode -X-O -X+O -X-C -X+C --fast --dev
+        --profile --profile.api --profile.flat --profile.graph --profile.html --profile.json --profile.out --profile.service"
 
     local i
     local script_given
@@ -57,6 +58,8 @@ __jruby() {
             jruby_cmds=("${jruby_cmds[@]##*/}")
             COMPREPLY=($(compgen -W "${jruby_cmds[*]}" -- "$cur"))
         fi
+    elif [[ $prev = --enable || $prev = --disable ]]; then
+        COMPREPLY=($(compgen -W "gems did_you_mean rubyopt frozen-string-literal" -- "$cur"))
     fi
 
     # Include `ruby` completion results, if available
