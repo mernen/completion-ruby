@@ -31,7 +31,7 @@ __rake() {
             # we want not to suffix the completion with a space. To do so, we
             # enable nospace, then add the space ourselves to entries that do
             # not end in `=`
-            compopt -o nospace
+            compopt -o nospace 2>/dev/null
             COMPREPLY=("${COMPREPLY[@]/%/ }")
             COMPREPLY=("${COMPREPLY[@]/%= /=}")
         elif [[ $cur = *'['* ]]; then
@@ -39,7 +39,7 @@ __rake() {
             #   and leave the cursor at the end (waiting for "," or "]");
             # - `noquote` so that braces don't get escaped (however, quoting
             #   long filenames becomes our responsibility)
-            compopt -o nospace -o noquote
+            compopt -o nospace -o noquote 2>/dev/null
 
             # Parameter completion (using default compgen)
             # $cur: example[param1,param2
@@ -83,7 +83,7 @@ __rake() {
             # Remove [parameters] from tasks
             COMPREPLY=("${COMPREPLY[@]/\[*/[}")
             # Disable quoting so that semicolons in task names don't get escaped
-            compopt -o noquote
+            compopt -o noquote 2>/dev/null
         fi
     esac
 

@@ -104,7 +104,7 @@ __bundle() {
                     # and also "local." and "mirror." as prefixes
                     # To achieve that, disable automatic space insertion,
                     # insert it manually, then add the non-spaced prefixes
-                    compopt -o nospace
+                    compopt -o nospace 2>/dev/null
                     options=("${options[@]/%/ }")
                     # And add prefix suggestions
                     options+=(local. mirror.)
