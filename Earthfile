@@ -20,9 +20,9 @@ rails-app:
     WORKDIR /usr/src
     RUN rails new testapp \
         --skip-git --skip-keeps \
-        --skip-action-cable --skip-action-mailer --skip-active-storage \
+        --skip-action-cable --skip-action-mailer --skip-action-mailbox --skip-active-job --skip-active-storage \
         --skip-action-text --skip-javascript --skip-sprockets --skip-turbolinks \
-        --skip-puma
+        --skip-bootsnap --skip-listen --skip-jbuilder --skip-puma
     ENV RAILS_TEST_APP_DIR=/usr/src/testapp
 
     # In Ruby 3 we need to explicitly declare REXML as a dependency
