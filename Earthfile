@@ -4,15 +4,15 @@ bash-completion:
     RUN curl 'https://raw.githubusercontent.com/scop/bash-completion/2.x/bash_completion' -o ./bash_completion
     SAVE ARTIFACT ./bash_completion
 
-baseline:
+ruby:
     ARG RUBY_VERSION=2.7
     FROM ruby:$RUBY_VERSION
 
     COPY +bash-completion/bash_completion /usr/src/bash_completion
     ENV BASH_COMPLETION_SCRIPT=/usr/src/bash_completion
 
-setup-rails-app:
-    FROM +baseline
+rails-app:
+    FROM +ruby
     ARG RAILS_VERSION="~>6.0"
 
     RUN gem install rails --version "$RAILS_VERSION"
@@ -43,7 +43,7 @@ test:
 
 
 test-bundle:
-    FROM +setup-rails-app
+    FROM +rails-app
 
     WORKDIR /usr/src/completion-ruby
     COPY --dir ./completion-bundle ./completion-rails ./completion-rake ./tests ./
@@ -57,7 +57,7 @@ test-bundle-all:
 
 
 test-gem:
-    FROM +baseline
+    FROM +ruby
 
     WORKDIR /usr/src/completion-ruby
     COPY --dir ./completion-gem ./tests ./
@@ -93,7 +93,7 @@ test-jruby-all:
 
 
 test-rails:
-    FROM +setup-rails-app
+    FROM +rails-app
 
     WORKDIR /usr/src/completion-ruby
     COPY --dir ./completion-rails ./tests ./
@@ -107,7 +107,7 @@ test-rails-all:
 
 
 test-rake:
-    FROM +setup-rails-app
+    FROM +rails-app
 
     WORKDIR /usr/src/completion-ruby
     COPY --dir ./completion-rake ./tests ./
@@ -121,7 +121,7 @@ test-rake-all:
 
 
 test-ruby:
-    FROM +baseline
+    FROM +ruby
 
     WORKDIR /usr/src/completion-ruby
     COPY --dir ./completion-ruby ./tests ./
