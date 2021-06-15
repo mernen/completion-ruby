@@ -1,5 +1,5 @@
 #! /bin/bash
-source "$(dirname "$0")/../test-setup"
+source "$(dirname "$0")/../test-utils"
 source "$(dirname "$0")/../../completion-jruby"
 
 _TEST_FN=__jruby

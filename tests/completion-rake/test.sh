@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source "$(dirname "$0")/../test-setup"
+source "$(dirname "$0")/../test-utils"
 source "$(dirname "$0")/../../completion-rake"
 
 _TEST_FN=__rake
