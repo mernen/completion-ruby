@@ -1,8 +1,9 @@
+#! bash
 # bash completion for various Ruby-related commands.
 #
-# Copyright (c) 2008-2017 Daniel Luz <dev at mernen dot com>.
+# Copyright (c) 2009-2021 Daniel Luz <dev dot gsz at mernen dot com>.
 # Distributed under the MIT license.
-# http://mernen.com/projects/completion-ruby
+# https://mernen.com/projects/completion-ruby
 #
 # This file automatically loads all other completions.
 # They all must be on the same directory for it to work.
