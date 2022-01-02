@@ -74,6 +74,7 @@ test-gem-all:
     BUILD --build-arg RUBY_VERSION=2.6 +test-gem
     BUILD --build-arg RUBY_VERSION=2.7 +test-gem
     BUILD --build-arg RUBY_VERSION=3.0 +test-gem
+    BUILD --build-arg RUBY_VERSION=3.1 +test-gem
 
 
 test-jruby:
@@ -138,3 +139,4 @@ test-ruby-all:
     BUILD --build-arg RUBY_VERSION=2.6 +test-ruby
     BUILD --build-arg RUBY_VERSION=2.7 +test-ruby
     BUILD --build-arg RUBY_VERSION=3.0 +test-ruby
+    BUILD --build-arg RUBY_VERSION=3.1 +test-ruby
