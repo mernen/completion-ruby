@@ -54,6 +54,7 @@ test-bundle-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-bundle
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-bundle
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-bundle
+    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-bundle
 
 
 test-gem:
@@ -105,6 +106,7 @@ test-rails-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rails
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rails
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rails
+    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-rails
 
 
 test-rake:
@@ -119,6 +121,7 @@ test-rake-all:
     BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rake
     BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rake
     BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rake
+    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-rake
 
 
 test-ruby:
