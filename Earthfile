@@ -90,8 +90,9 @@ test-jruby:
     RUN ./tests/completion-jruby/test.sh
 
 test-jruby-all:
-    BUILD --build-arg JRUBY_VERSION=9.2 +test-jruby
-    BUILD --build-arg JRUBY_VERSION=9.3 +test-jruby
+    # jruby images are not available for ARM64, so let's force x86-64
+    BUILD --platform=linux/amd64 --build-arg JRUBY_VERSION=9.2 +test-jruby
+    BUILD --platform=linux/amd64 --build-arg JRUBY_VERSION=9.3 +test-jruby
 
 
 test-rails:
