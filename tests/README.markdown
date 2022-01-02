@@ -8,7 +8,7 @@ An ad-hoc testing utility is written in the [`test-utils`](./test-utils) file.
 ## Running tests
 
 To run these tests, [Earthly] is needed (which, by extension, also needs [Docker]).
-Check [Earthly's install instructions][earhtly-install].
+Check [Earthly's install instructions][earthly-install].
 
 To test a single completion script:
 
