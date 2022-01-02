@@ -134,7 +134,7 @@ __rails() {
     else
         case $rails_command in
         "")
-            options=$(__rails_exec \|\
+            options=$(__rails_exec --help \|\
                       'puts $1 if ~/^  rails (\S+)/;
                        puts $1 if ~/^ (\S+)/;
                        puts $1 if ~/alias: "(\S+)"/')
