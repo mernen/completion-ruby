@@ -88,8 +88,8 @@ test-jruby:
     RUN ./tests/completion-jruby/test.sh
 
 test-jruby-all:
-    BUILD --build-arg JRUBY_VERSION=9.1 +test-jruby
     BUILD --build-arg JRUBY_VERSION=9.2 +test-jruby
+    BUILD --build-arg JRUBY_VERSION=9.3 +test-jruby
 
 
 test-rails:
