@@ -15,6 +15,6 @@ jobs:
       run: |
         sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.4/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'
     - name: Test all supported versions
-      run: earthly +test
+      run: earthly --ci +test
     - name: Test latest releases
-      run: earthly +test-latest
+      run: earthly --ci +test-latest
