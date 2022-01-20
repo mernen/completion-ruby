@@ -39,6 +39,13 @@ test:
     BUILD +test-rake-all
     BUILD +test-ruby-all
 
+test-latest:
+    BUILD +test-bundle --RUBY_VERSION=latest --RAILS_VERSION=">=7"
+    BUILD +test-gem --RUBY_VERSION=latest
+    BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=latest
+    BUILD +test-rails --RUBY_VERSION=latest --RAILS_VERSION=">=7"
+    BUILD +test-rake --RUBY_VERSION=latest --RAILS_VERSION=">=7"
+    BUILD +test-ruby --RUBY_VERSION=latest
 
 test-bundle:
     FROM +rails-app
