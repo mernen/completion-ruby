@@ -13,8 +13,11 @@ ruby:
 
 rails-app:
     FROM +ruby
-    ARG RAILS_VERSION="~>6.0"
 
+    # Nokogiri 1.13 dropped support for Ruby <2.6; we have to install an earlier version
+    RUN ruby -e 'system %{gem install nokogiri --version "~>1.12.5"} if Gem.ruby_version < Gem::Version.new("2.6")'
+
+    ARG RAILS_VERSION="~>6.0"
     RUN gem install rails --version "$RAILS_VERSION"
 
     WORKDIR /usr/src
