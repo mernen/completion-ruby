@@ -3,6 +3,7 @@
 **completion-ruby** is a set of [bash] scripts offering command-line
 completion for various [Ruby]-related commands and tools.
 
+
 ## Installation
 
 These scripts depend on some utility functions from [bash-completion]. It
@@ -20,6 +21,7 @@ The `completion-ruby-all` script loads all the completions it finds,
 but only for the commands you appear to have installed.
 Alternatively, you can just save the specific scripts you wish, and
 source them individually.
+
 
 ## Why yet another completion script?
 
@@ -40,9 +42,17 @@ a dependency of the rakefile is updated; as a workaround, simply
 `touch Rakefile`), but it tries to cover all the most common cases without
 overcomplicating or overthinking the code.
 
+
+## Testing
+
+To ensure the scripts run across a wide range of versions of tools, some
+automated tests are performed.
+Please see the [tests directory](./tests#readme) for details.
+
+
 ## License and website
 
-Copyright © 2008-2021 [Daniel Luz].
+Copyright © 2008-2022 [Daniel Luz].
 
 **completion-ruby** is distributed under the [MIT license].
 
