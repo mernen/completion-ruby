@@ -17,7 +17,7 @@ To test a single completion script, run from the project root:
 This will instantiate a basic Rails project in a container to perform the tests.
 A default version of Ruby and Rails will be picked, but you can specify it using:
 
-    $ earthly --build-arg RUBY_VERSION=3.0 +test-rake
+    $ earthly +test-rake --RUBY_VERSION=3.0
 
 To test a certain script against all supported versions of Ruby/Rails/etc.,
 use the `+test-*-all` target:

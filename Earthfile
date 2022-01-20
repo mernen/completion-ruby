@@ -1,3 +1,5 @@
+VERSION 0.6
+
 bash-completion:
     FROM curlimages/curl:7.77.0
     WORKDIR /tmp
@@ -53,11 +55,11 @@ test-bundle:
     RUN ./tests/completion-bundle/test.sh
 
 test-bundle-all:
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>5.0" +test-bundle
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-bundle
-    BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-bundle
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-bundle
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-bundle
+    BUILD +test-bundle --RUBY_VERSION=2.5 --RAILS_VERSION="~>5.0"
+    BUILD +test-bundle --RUBY_VERSION=2.5 --RAILS_VERSION="~>6.0"
+    BUILD +test-bundle --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
+    BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
+    BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
 
 
 test-gem:
@@ -68,17 +70,17 @@ test-gem:
     RUN ./tests/completion-gem/test.sh
 
 test-gem-all:
-    BUILD --build-arg RUBY_VERSION=1.9 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.0 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.1 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.2 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.3 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.4 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.5 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.6 +test-gem
-    BUILD --build-arg RUBY_VERSION=2.7 +test-gem
-    BUILD --build-arg RUBY_VERSION=3.0 +test-gem
-    BUILD --build-arg RUBY_VERSION=3.1 +test-gem
+    BUILD +test-gem --RUBY_VERSION=1.9
+    BUILD +test-gem --RUBY_VERSION=2.0
+    BUILD +test-gem --RUBY_VERSION=2.1
+    BUILD +test-gem --RUBY_VERSION=2.2
+    BUILD +test-gem --RUBY_VERSION=2.3
+    BUILD +test-gem --RUBY_VERSION=2.4
+    BUILD +test-gem --RUBY_VERSION=2.5
+    BUILD +test-gem --RUBY_VERSION=2.6
+    BUILD +test-gem --RUBY_VERSION=2.7
+    BUILD +test-gem --RUBY_VERSION=3.0
+    BUILD +test-gem --RUBY_VERSION=3.1
 
 
 test-jruby:
@@ -94,8 +96,8 @@ test-jruby:
 
 test-jruby-all:
     # jruby images are not available for ARM64, so let's force x86-64
-    BUILD --platform=linux/amd64 --build-arg JRUBY_VERSION=9.2 +test-jruby
-    BUILD --platform=linux/amd64 --build-arg JRUBY_VERSION=9.3 +test-jruby
+    BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=9.2
+    BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=9.3
 
 
 test-rails:
@@ -106,11 +108,11 @@ test-rails:
     RUN ./tests/completion-rails/test.sh
 
 test-rails-all:
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>5.0" +test-rails
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rails
-    BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rails
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rails
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-rails
+    BUILD +test-rails --RUBY_VERSION=2.5 --RAILS_VERSION="~>5.0"
+    BUILD +test-rails --RUBY_VERSION=2.5 --RAILS_VERSION="~>6.0"
+    BUILD +test-rails --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
+    BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
+    BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
 
 
 test-rake:
@@ -121,11 +123,11 @@ test-rake:
     RUN ./tests/completion-rake/test.sh
 
 test-rake-all:
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>5.0" +test-rake
-    BUILD --build-arg RUBY_VERSION=2.5 --build-arg RAILS_VERSION="~>6.0" +test-rake
-    BUILD --build-arg RUBY_VERSION=2.7 --build-arg RAILS_VERSION="~>6.0" +test-rake
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>6.0" +test-rake
-    BUILD --build-arg RUBY_VERSION=3.0 --build-arg RAILS_VERSION="~>7.0" +test-rake
+    BUILD +test-rake --RUBY_VERSION=2.5 --RAILS_VERSION="~>5.0"
+    BUILD +test-rake --RUBY_VERSION=2.5 --RAILS_VERSION="~>6.0"
+    BUILD +test-rake --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
+    BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
+    BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
 
 
 test-ruby:
@@ -136,14 +138,14 @@ test-ruby:
     RUN ./tests/completion-ruby/test.sh
 
 test-ruby-all:
-    BUILD --build-arg RUBY_VERSION=1.9 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.0 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.1 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.2 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.3 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.4 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.5 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.6 +test-ruby
-    BUILD --build-arg RUBY_VERSION=2.7 +test-ruby
-    BUILD --build-arg RUBY_VERSION=3.0 +test-ruby
-    BUILD --build-arg RUBY_VERSION=3.1 +test-ruby
+    BUILD +test-ruby --RUBY_VERSION=1.9
+    BUILD +test-ruby --RUBY_VERSION=2.0
+    BUILD +test-ruby --RUBY_VERSION=2.1
+    BUILD +test-ruby --RUBY_VERSION=2.2
+    BUILD +test-ruby --RUBY_VERSION=2.3
+    BUILD +test-ruby --RUBY_VERSION=2.4
+    BUILD +test-ruby --RUBY_VERSION=2.5
+    BUILD +test-ruby --RUBY_VERSION=2.6
+    BUILD +test-ruby --RUBY_VERSION=2.7
+    BUILD +test-ruby --RUBY_VERSION=3.0
+    BUILD +test-ruby --RUBY_VERSION=3.1
