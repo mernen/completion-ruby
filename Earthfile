@@ -30,13 +30,6 @@ rails-app:
         --skip-bootsnap --skip-listen --skip-jbuilder --skip-puma
     ENV RAILS_TEST_APP_DIR=/usr/src/testapp
 
-    # In Ruby 3 we need to explicitly declare REXML as a dependency
-    RUN if [ ${RUBY_VERSION%%.*} -ge 3 ]; then \
-            cd "$RAILS_TEST_APP_DIR" && \
-            echo 'gem "rexml"' >>Gemfile && \
-            bundle; \
-        fi
-
 
 test:
     BUILD +test-bundle-all
