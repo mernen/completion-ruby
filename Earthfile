@@ -42,7 +42,7 @@ test:
 test-latest:
     BUILD +test-bundle --RUBY_VERSION=latest --RAILS_VERSION=">=7"
     BUILD +test-gem --RUBY_VERSION=latest
-    BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=latest
+    BUILD +test-jruby --JRUBY_VERSION=latest
     BUILD +test-rails --RUBY_VERSION=latest --RAILS_VERSION=">=7"
     BUILD +test-rake --RUBY_VERSION=latest --RAILS_VERSION=">=7"
     BUILD +test-ruby --RUBY_VERSION=latest
@@ -95,9 +95,9 @@ test-jruby:
     RUN ./tests/completion-jruby/test.sh
 
 test-jruby-all:
-    # jruby images are not available for ARM64, so let's force x86-64
+    # jruby images are available for ARM64 only starting with 9.3, so let's force x86-64
     BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=9.2
-    BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=9.3
+    BUILD +test-jruby --JRUBY_VERSION=9.3
 
 
 test-rails:
