@@ -60,6 +60,7 @@ test-bundle-all:
     BUILD +test-bundle --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-bundle --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
 
 
 test-gem:
@@ -113,6 +114,7 @@ test-rails-all:
     BUILD +test-rails --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-rails --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
 
 
 test-rake:
@@ -128,6 +130,7 @@ test-rake-all:
     BUILD +test-rake --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-rake --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
 
 
 test-ruby:
