@@ -52,8 +52,6 @@ test-bundle:
     RUN ./tests/completion-bundle/test.sh
 
 test-bundle-all:
-    BUILD +test-bundle --RUBY_VERSION=2.6 --RAILS_VERSION="~>5.0"
-    BUILD +test-bundle --RUBY_VERSION=2.6 --RAILS_VERSION="~>6.0"
     BUILD +test-bundle --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
@@ -107,8 +105,6 @@ test-rails:
     RUN ./tests/completion-rails/test.sh
 
 test-rails-all:
-    BUILD +test-rails --RUBY_VERSION=2.6 --RAILS_VERSION="~>5.0"
-    BUILD +test-rails --RUBY_VERSION=2.6 --RAILS_VERSION="~>6.0"
     BUILD +test-rails --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
@@ -123,8 +119,6 @@ test-rake:
     RUN ./tests/completion-rake/test.sh
 
 test-rake-all:
-    BUILD +test-rake --RUBY_VERSION=2.6 --RAILS_VERSION="~>5.0"
-    BUILD +test-rake --RUBY_VERSION=2.6 --RAILS_VERSION="~>6.0"
     BUILD +test-rake --RUBY_VERSION=2.7 --RAILS_VERSION="~>6.0"
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
