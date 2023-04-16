@@ -1,7 +1,7 @@
-VERSION 0.6
+VERSION 0.7
 
 bash-completion:
-    FROM curlimages/curl:7.77.0
+    FROM curlimages/curl:8.00.1
     WORKDIR /tmp
     RUN curl 'https://raw.githubusercontent.com/scop/bash-completion/2.x/bash_completion' -o ./bash_completion
     SAVE ARTIFACT ./bash_completion
