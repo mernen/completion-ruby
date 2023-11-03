@@ -9,7 +9,7 @@ begin-test 'when outside of a Rails project, should offer the command `new`'
 (
     test-completion rails ''
     expect new
-    reject generate console
+    reject generate
 )
 end-test
 

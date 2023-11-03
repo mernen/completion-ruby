@@ -134,10 +134,37 @@ __rails() {
     else
         case $rails_command in
         "")
+            # Output until v7.0 when outside of a Rails project:
+            # > Usage:
+            # >   rails new APP_PATH [options]
+            # (...)
+            # > Runtime options:
+            #   -f, [--force]  # (...)
+            #
+            # Output beginning with v7.1:
+            # > Usage:
+            # >   rails COMMAND [options]
+            # >
+            # > You must specify a command:
+            # >
+            # >   new          Create a new (...)
+            #
+            # Output beginning with v7.1 when in a Rails project:
+            # > Usage:
+            # >   bin/rails COMMAND [options]
+            # >
+            # > You must specify a command. The most common commands are:
+            # >
+            # >   generate     Generate new code (short-cut alias: "g")
+            # (...)
+            # > In addition to those commands, there are:
+            # >
+            # > about          List versions (...)
             options=$(__rails_exec --help \|\
-                      'puts $1 if ~/^  rails (\S+)/;
-                       puts $1 if ~/^ (\S+)/;
-                       puts $1 if ~/alias: "(\S+)"/')
+                      'puts $1 if ~/^  rails (?!COMMAND\b)(\S+)/;
+                       puts $1 if ~/^ {1,2}(\S+)/;
+                       puts $1 if ~/alias: "(\S+)"/;
+                       puts $1 if ~/^(\w+(:\w+)*)((?<=\[)\S+\])? {2,}\w/')
             # If you've already typed one character, let's skip the
             # single-character shortcuts; this way, typing in "rails c<TAB>"
             # will instantly complete to "console", rather than just beeping
