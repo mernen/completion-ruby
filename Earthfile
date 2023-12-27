@@ -57,6 +57,7 @@ test-bundle-all:
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
+    BUILD +test-bundle --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
 
 
 test-gem:
@@ -79,6 +80,7 @@ test-gem-all:
     BUILD +test-gem --RUBY_VERSION=3.0
     BUILD +test-gem --RUBY_VERSION=3.1
     BUILD +test-gem --RUBY_VERSION=3.2
+    BUILD +test-gem --RUBY_VERSION=3.3
 
 
 test-jruby:
@@ -112,6 +114,7 @@ test-rails-all:
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
+    BUILD +test-rails --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
 
 
 test-rake:
@@ -127,6 +130,7 @@ test-rake-all:
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
+    BUILD +test-rake --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
 
 
 test-ruby:
@@ -149,3 +153,4 @@ test-ruby-all:
     BUILD +test-ruby --RUBY_VERSION=3.0
     BUILD +test-ruby --RUBY_VERSION=3.1
     BUILD +test-ruby --RUBY_VERSION=3.2
+    BUILD +test-ruby --RUBY_VERSION=3.3
