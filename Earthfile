@@ -7,7 +7,7 @@ bash-completion:
     SAVE ARTIFACT ./bash_completion
 
 ruby:
-    ARG RUBY_VERSION=2.7
+    ARG RUBY_VERSION=3.3
     FROM ruby:$RUBY_VERSION
 
     COPY +bash-completion/bash_completion /usr/src/bash_completion
