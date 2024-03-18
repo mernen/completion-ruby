@@ -1,4 +1,4 @@
-VERSION 0.7
+VERSION 0.8
 
 bash-completion:
     FROM curlimages/curl:8.00.1

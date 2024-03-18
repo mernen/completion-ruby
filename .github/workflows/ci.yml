@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: earthly/actions-setup@v1
       with:
-        version: "^0.7"
+        version: "^0.8"
     - uses: actions/checkout@v3
     - name: Test all supported versions
       run: earthly --ci +test
