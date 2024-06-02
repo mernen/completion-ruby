@@ -73,5 +73,5 @@ __ruby() {
     fi
 }
 
-complete -F __ruby -o filenames -o bashdefault -o default ruby ruby1.{8..9} ruby2.{0..7}
+complete -F __ruby -o filenames -o bashdefault -o default ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..3}
 # vim: ai ft=sh sw=4 sts=4 et

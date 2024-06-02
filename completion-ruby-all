@@ -101,7 +101,7 @@ else
     _cr_load rails
     _cr_load bundle bundler
     _cr_load rake
-    _cr_load ruby ruby1.{8..9} ruby2.{0..7}
+    _cr_load ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..3}
 
     unset -f _cr_load _cr_anycmd
     unset -v _CR_PATH
