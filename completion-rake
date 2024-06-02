@@ -180,5 +180,5 @@ __rake_tasks() {
     fi
 }
 
-complete -F __rake -o bashdefault -o default rake rake1.8 rake1.9
+complete -F __rake -o bashdefault -o default rake rake1.{8..9} rake2.{0..7} rake3.{0..3}
 # vim: ai ft=sh sw=4 sts=4 et
