@@ -96,12 +96,12 @@ else
         }
     fi
 
-    _cr_load gem gem1.{8..9} gem2.{0..7} jgem
+    _cr_load gem gem1.{8..9} gem2.{0..7} gem3.{0..3} jgem
     _cr_load jruby
     _cr_load rails
-    _cr_load bundle bundler
-    _cr_load rake
-    _cr_load ruby ruby1.{8..9} ruby2.{0..7}
+    _cr_load bundle bundle2.{0..7} bundle3.{0..3} bundler bundler2.{0..7} bundler3.{0..3}
+    _cr_load rake rake1.{8..9} rake2.{0..7} rake3.{0..3}
+    _cr_load ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..3}
 
     unset -f _cr_load _cr_anycmd
     unset -v _CR_PATH
