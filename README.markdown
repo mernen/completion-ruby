@@ -23,6 +23,19 @@ Alternatively, you can just save the specific scripts you wish, and
 source them individually.
 
 
+## Maintenance status
+
+This project is considered **stable**.
+No new features are planned, and as a result it remains domant for months,
+but the continuous integration test suite will occasionally detect
+a change in behavior in a tool, and maintenance work is performed.
+
+For information on the automated test suite, see the [tests directory](./tests#readme).
+
+If one of the covered tools introduces a new flag that needs special treatment,
+please file an issue or pull request.
+
+
 ## Why yet another completion script?
 
 Before writing my own, I'd seen about five different scripts for `rake`
@@ -43,16 +56,9 @@ a dependency of the rakefile is updated; as a workaround, simply
 overcomplicating or overthinking the code.
 
 
-## Testing
-
-To ensure the scripts run across a wide range of versions of tools, some
-automated tests are performed.
-Please see the [tests directory](./tests#readme) for details.
-
-
 ## License and website
 
-Copyright © 2008-2022 [Daniel Luz].
+Copyright © 2008-2024 [Daniel Luz].
 
 **completion-ruby** is distributed under the [MIT license].
 
