@@ -17,6 +17,7 @@ rails-app:
     FROM +ruby
 
     ARG RAILS_VERSION="~>7.0"
+    RUN gem update --system
     RUN gem install rails --version "$RAILS_VERSION"
 
     WORKDIR /usr/src
