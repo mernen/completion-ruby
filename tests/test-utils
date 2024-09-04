@@ -1,6 +1,9 @@
 #! bash
 [[ -n $BASH_COMPLETION_SCRIPT ]] && source "$BASH_COMPLETION_SCRIPT"
 
+# This builtin only works in real completions, so stub it for the tests
+compopt() { true; }
+
 begin-test() {
     echo "TEST: $1"
 }
