@@ -17,6 +17,7 @@ rails-app:
     FROM +ruby
 
     ARG RAILS_VERSION="~>7.0"
+    RUN gem update --system
     RUN gem install rails --version "$RAILS_VERSION"
 
     WORKDIR /usr/src
@@ -53,7 +54,7 @@ test-bundle:
 
 test-bundle-all:
     BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
-    BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-bundle --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.1.0"
     BUILD +test-bundle --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
@@ -109,7 +110,7 @@ test-rails:
 
 test-rails-all:
     BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
-    BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-rails --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.1.0"
     BUILD +test-rails --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
@@ -124,7 +125,7 @@ test-rake:
 
 test-rake-all:
     BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>6.0"
-    BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.0"
+    BUILD +test-rake --RUBY_VERSION=3.0 --RAILS_VERSION="~>7.1.0"
     BUILD +test-rake --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
