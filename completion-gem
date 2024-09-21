@@ -64,7 +64,7 @@ __gem() {
             return;;
         uninstall | cleanup)
             choices=$(__gem_installed_gems);;
-        push)
+        push | unpack)
             type -t _filedir >/dev/null && _filedir gem
             return;;
         esac

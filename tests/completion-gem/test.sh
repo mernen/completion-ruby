@@ -70,3 +70,15 @@ begin-test 'should offer command-specific options'
     reject --strict
 )
 end-test
+
+begin-test 'after unpack should suggest local .gem files'
+(
+    touch foo.rb foo.gem foo.gemspec
+
+    test-completion gem unpack f
+    expect foo.gem
+    reject foo.rb foo.gemspec
+
+    rm -f foo.rb foo.gem foo.gemspec
+)
+end-test
