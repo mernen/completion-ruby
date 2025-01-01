@@ -7,7 +7,7 @@ bash-completion:
     SAVE ARTIFACT ./bash_completion
 
 ruby:
-    ARG RUBY_VERSION=3.3
+    ARG RUBY_VERSION=3.4
     FROM ruby:$RUBY_VERSION
 
     COPY +bash-completion/bash_completion /usr/src/bash_completion
@@ -38,11 +38,11 @@ test:
     BUILD +test-ruby-all
 
 test-latest:
-    BUILD +test-bundle --RUBY_VERSION=latest --RAILS_VERSION=">=7"
+    BUILD +test-bundle --RUBY_VERSION=latest --RAILS_VERSION=">=8"
     BUILD +test-gem --RUBY_VERSION=latest
     BUILD +test-jruby --JRUBY_VERSION=latest
-    BUILD +test-rails --RUBY_VERSION=latest --RAILS_VERSION=">=7"
-    BUILD +test-rake --RUBY_VERSION=latest --RAILS_VERSION=">=7"
+    BUILD +test-rails --RUBY_VERSION=latest --RAILS_VERSION=">=8"
+    BUILD +test-rake --RUBY_VERSION=latest --RAILS_VERSION=">=8"
     BUILD +test-ruby --RUBY_VERSION=latest
 
 test-bundle:
@@ -56,6 +56,9 @@ test-bundle-all:
     BUILD +test-bundle --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-bundle --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
+    BUILD +test-bundle --RUBY_VERSION=3.2 --RAILS_VERSION="~>8.0"
+    BUILD +test-bundle --RUBY_VERSION=3.3 --RAILS_VERSION="~>8.0"
+    BUILD +test-bundle --RUBY_VERSION=3.4 --RAILS_VERSION="~>8.0"
 
 
 test-gem:
@@ -79,6 +82,7 @@ test-gem-all:
     BUILD +test-gem --RUBY_VERSION=3.1
     BUILD +test-gem --RUBY_VERSION=3.2
     BUILD +test-gem --RUBY_VERSION=3.3
+    BUILD +test-gem --RUBY_VERSION=3.4
 
 
 test-jruby:
@@ -110,6 +114,9 @@ test-rails-all:
     BUILD +test-rails --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-rails --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
+    BUILD +test-rails --RUBY_VERSION=3.2 --RAILS_VERSION="~>8.0"
+    BUILD +test-rails --RUBY_VERSION=3.3 --RAILS_VERSION="~>8.0"
+    BUILD +test-rails --RUBY_VERSION=3.4 --RAILS_VERSION="~>8.0"
 
 
 test-rake:
@@ -123,6 +130,9 @@ test-rake-all:
     BUILD +test-rake --RUBY_VERSION=3.1 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.2 --RAILS_VERSION="~>7.0"
     BUILD +test-rake --RUBY_VERSION=3.3 --RAILS_VERSION="~>7.0"
+    BUILD +test-rake --RUBY_VERSION=3.2 --RAILS_VERSION="~>8.0"
+    BUILD +test-rake --RUBY_VERSION=3.3 --RAILS_VERSION="~>8.0"
+    BUILD +test-rake --RUBY_VERSION=3.4 --RAILS_VERSION="~>8.0"
 
 
 test-ruby:
@@ -146,3 +156,4 @@ test-ruby-all:
     BUILD +test-ruby --RUBY_VERSION=3.1
     BUILD +test-ruby --RUBY_VERSION=3.2
     BUILD +test-ruby --RUBY_VERSION=3.3
+    BUILD +test-ruby --RUBY_VERSION=3.4
