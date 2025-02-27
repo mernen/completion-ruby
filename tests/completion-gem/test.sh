@@ -5,6 +5,8 @@ source "$(dirname "$0")/../../completion-gem"
 _TEST_FN=__gem
 _TEST_BINARIES=(ruby gem)
 
+begin-test-suite
+
 begin-test 'should suggest options'
 (
     test-completion gem -
@@ -82,3 +84,5 @@ begin-test 'after unpack should suggest local .gem files'
     rm -f foo.rb foo.gem foo.gemspec
 )
 end-test
+
+end-test-suite

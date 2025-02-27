@@ -5,6 +5,8 @@ source "$(dirname "$0")/../../completion-ruby"
 _TEST_FN=__ruby
 _TEST_BINARIES=(ruby)
 
+begin-test-suite
+
 begin-test 'should suggest options'
 (
     test-completion ruby -
@@ -18,3 +20,5 @@ begin-test 'after -S should suggest commands from PATH'
     expect bundle rake
 )
 end-test
+
+end-test-suite

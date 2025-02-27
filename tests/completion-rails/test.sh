@@ -5,6 +5,8 @@ source "$(dirname "$0")/../../completion-rails"
 _TEST_FN=__rails
 _TEST_BINARIES=(ruby rails)
 
+begin-test-suite
+
 begin-test 'when outside of a Rails project, should offer the command `new`'
 (
     test-completion rails ''
@@ -36,3 +38,5 @@ begin-test 'completion should work in subdirectories'
     expect controller generator helper model
 )
 end-test
+
+end-test-suite

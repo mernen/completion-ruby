@@ -5,6 +5,8 @@ source "$(dirname "$0")/../../completion-jruby"
 _TEST_FN=__jruby
 _TEST_BINARIES=(jruby)
 
+begin-test-suite
+
 begin-test 'should provide (limited) funcitonality when completion-ruby is not present'
 (
     test-completion jruby -
@@ -34,3 +36,5 @@ begin-test "after --disable should suggest features"
     expect did_you_mean gems rubyopt
 )
 end-test
+
+end-test-suite

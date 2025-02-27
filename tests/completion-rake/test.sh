@@ -8,6 +8,8 @@ _TEST_BINARIES=(ruby rake rails)
 
 cd "$RAILS_TEST_APP_DIR"
 
+begin-test-suite
+
 begin-test 'should offer commands from the Rakefile'
 (
     test-completion rake ''
@@ -32,3 +34,5 @@ begin-test 'should suggest options'
     expect --backtrace= '--help ' '--version '
 )
 end-test
+
+end-test-suite

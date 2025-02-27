@@ -9,6 +9,8 @@ _TEST_BINARIES=(ruby bundle rails)
 
 cd "$RAILS_TEST_APP_DIR"
 
+print-binary-versions
+
 begin-test 'should offer basic commands'
 (
     test-completion bundle ''
@@ -39,3 +41,5 @@ begin-test 'should trigger completion for subcommands: rails'
     reject install
 )
 end-test
+
+end-test-suite
