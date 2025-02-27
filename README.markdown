@@ -58,7 +58,7 @@ overcomplicating or overthinking the code.
 
 ## License and website
 
-Copyright © 2008-2024 [Daniel Luz].
+Copyright © 2008–2025 [Daniel Luz].
 
 **completion-ruby** is distributed under the [MIT license].
 

@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `gem` command.
 #
-# Copyright (c) 2009-2021 Daniel Luz <dev dot gsz at mernen dot com>.
+# Copyright (c) 2008-2025 Daniel Luz <dev dot gsz at mernen dot com>.
 # Distributed under the MIT license.
 # https://mernen.com/projects/completion-ruby
 #
@@ -137,5 +137,5 @@ __gem_command_options() {
             end' 2>/dev/null
 }
 
-complete -F __gem -o bashdefault -o default gem gem1.{8..9} gem2.{0..7} gem3.{0..3} jgem
+complete -F __gem -o bashdefault -o default gem gem1.{8..9} gem2.{0..7} gem3.{0..4} jgem
 # vim: ai ft=sh sw=4 sts=4 et

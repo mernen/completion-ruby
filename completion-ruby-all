@@ -1,7 +1,7 @@
 #! bash
 # bash completion for various Ruby-related commands.
 #
-# Copyright (c) 2009-2021 Daniel Luz <dev dot gsz at mernen dot com>.
+# Copyright (c) 2008-2025 Daniel Luz <dev dot gsz at mernen dot com>.
 # Distributed under the MIT license.
 # https://mernen.com/projects/completion-ruby
 #
@@ -96,12 +96,12 @@ else
         }
     fi
 
-    _cr_load gem gem1.{8..9} gem2.{0..7} gem3.{0..3} jgem
+    _cr_load gem gem1.{8..9} gem2.{0..7} gem3.{0..4} jgem
     _cr_load jruby
     _cr_load rails
-    _cr_load bundle bundle2.{0..7} bundle3.{0..3} bundler bundler2.{0..7} bundler3.{0..3}
-    _cr_load rake rake1.{8..9} rake2.{0..7} rake3.{0..3}
-    _cr_load ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..3}
+    _cr_load bundle bundle2.{0..7} bundle3.{0..4} bundler bundler2.{0..7} bundler3.{0..4}
+    _cr_load rake rake1.{8..9} rake2.{0..7} rake3.{0..4}
+    _cr_load ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..4}
 
     unset -f _cr_load _cr_anycmd
     unset -v _CR_PATH

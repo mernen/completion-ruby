@@ -1,7 +1,7 @@
 #! bash
 # bash completion for the `ruby` command.
 #
-# Copyright (c) 2009-2021 Daniel Luz <dev dot gsz at mernen dot com>.
+# Copyright (c) 2009-2025 Daniel Luz <dev dot gsz at mernen dot com>.
 # Distributed under the MIT license.
 # https://mernen.com/projects/completion-ruby
 #
@@ -73,5 +73,5 @@ __ruby() {
     fi
 }
 
-complete -F __ruby -o filenames -o bashdefault -o default ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..3}
+complete -F __ruby -o filenames -o bashdefault -o default ruby ruby1.{8..9} ruby2.{0..7} ruby3.{0..4}
 # vim: ai ft=sh sw=4 sts=4 et
