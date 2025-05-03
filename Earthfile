@@ -86,7 +86,7 @@ test-gem-all:
 
 
 test-jruby:
-    ARG JRUBY_VERSION=9
+    ARG JRUBY_VERSION=10
     FROM jruby:$JRUBY_VERSION
 
     COPY +bash-completion/bash_completion /usr/src/bash_completion
@@ -101,6 +101,7 @@ test-jruby-all:
     BUILD --platform=linux/amd64 +test-jruby --JRUBY_VERSION=9.2
     BUILD +test-jruby --JRUBY_VERSION=9.3
     BUILD +test-jruby --JRUBY_VERSION=9.4
+    BUILD +test-jruby --JRUBY_VERSION=10.0
 
 
 test-rails:
