@@ -26,6 +26,29 @@ begin-test 'should offer global options'
 )
 end-test
 
+begin-test 'should offer configurations with trailing spaces for: bundle config'
+(
+    test-completion bundle config ''
+    expect 'path ' 'frozen ' 'without ' local.
+    reject install rake 'local. '
+)
+end-test
+
+begin-test 'should offer configurations with trailing spaces for: bundle config get'
+(
+    test-completion bundle config get c
+    expect 'cache_all_platforms ' 'cache_all ' 'clean ' 'console '
+)
+end-test
+
+begin-test 'should offer local gems for: bundle config get local.*'
+(
+    test-completion bundle config get local.
+    expect local.rake
+    reject local.cache_all_platforms
+)
+end-test
+
 begin-test 'should trigger completion for subcommands: rake'
 (
     test-completion bundle exec rake ''

@@ -81,7 +81,7 @@ __bundle() {
             ;;
         config)
             case $prev in
-            config | --*)
+            config | get | set | unset | --*)
                 case $cur in
                 local.*)
                     options=($(__bundle_exec_ruby 'puts Bundler.definition.specs.to_hash.keys'))
@@ -100,17 +100,19 @@ __bundle() {
                              no_install no_prune only_update_to_newer_versions
                              plugins shebang silence_root_warning
                              ssl_verify_mode system_bindir user_agent)
+                    if [[ $prev = config ]]; then
+                        options+=(get set unset)
+                    fi
                     # We want to suggest the options above as complete words,
                     # and also "local." and "mirror." as prefixes
                     # To achieve that, disable automatic space insertion,
                     # insert it manually, then add the non-spaced prefixes
                     compopt -o nospace 2>/dev/null
-                    options=("${options[@]/%/ }")
-                    # And add prefix suggestions
-                    options+=(local. mirror.)
-                    # Override $IFS for completion to work
                     local IFS=$'\n'
-                    COMPREPLY=($(compgen -W '${options[@]}' -- "$cur"))
+                    COMPREPLY=($(compgen -W "${options[*]}" -S ' ' -- "$cur"))
+                    # And add prefix suggestions
+                    options=(local. mirror.)
+                    COMPREPLY+=($(compgen -W "${options[*]}" -- "$cur"))
                     return
                     ;;
                 esac
