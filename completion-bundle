@@ -23,6 +23,8 @@ __bundle() {
         case $bundle_command in
         "")
             options="$options --version";;
+        binstubs)
+            options="$options --force --path --shebang --standalone --all --all-platforms";;
         check)
             options="$options --dry-run --gemfile --path -r --retry";;
         clean)
