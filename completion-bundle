@@ -68,6 +68,17 @@ __bundle() {
                      check show outdated console open lock viz init gem
                      platform clean doctor"
             ;;
+        binstubs)
+            case $prev in
+            --path)
+                _filedir -d
+                return;;
+            --shebang)
+                options="ruby";;
+            *)
+                options=($(__bundle_exec_ruby 'puts Bundler.definition.specs.to_hash.keys'))
+            esac
+            ;;
         check | install)
             case $prev in
             --binstubs | --path)
