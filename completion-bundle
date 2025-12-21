@@ -73,8 +73,6 @@ __bundle() {
             --path)
                 _filedir -d
                 return;;
-            --shebang)
-                options="ruby";;
             *)
                 options=($(__bundle_exec_ruby 'puts Bundler.definition.specs.to_hash.keys'))
             esac
